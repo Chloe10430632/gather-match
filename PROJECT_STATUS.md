@@ -6,7 +6,9 @@
 
 - 工作區根目錄：`Side Project 揪團工具`
 - Nuxt 前端：`nuxt-gather-match/`
-- 技術：Nuxt 3、Vue 3、TypeScript、Tailwind CSS
+- 前端技術：Nuxt 3、Vue 3、TypeScript、Tailwind CSS
+- 後端規劃：ASP.NET Core 8 Web API、EF Core Code First、Npgsql
+- 資料庫規劃：Supabase Free 代管的 PostgreSQL
 
 ## 目前做到哪裡
 
@@ -62,6 +64,19 @@
 - Vue 狀態目前以 `ref` 為主，沒有使用 `reactive`。
 - 最近一次 production build 已成功完成。
 
+### 已確認的後端與資料庫方向
+
+- 使用 ASP.NET Core 8 Web API 作為唯一的應用程式後端，Nuxt 不直接操作 Supabase。
+- Supabase 第一階段只作為代管 PostgreSQL，不先加入 Supabase Auth、Realtime、Storage、Edge Functions 或 Data API。
+- 使用 Entity Framework Core 作為 ORM，透過 `Npgsql.EntityFrameworkCore.PostgreSQL` 連接 PostgreSQL。
+- 採用「先設計資料模型，再用 Code First 實作」：
+  1. 先確認 ERD、欄位、關聯、限制與索引。
+  2. 建立 C# Entity、`DbContext` 與 Fluent API 設定。
+  3. 以 EF Core Migration 建立及更新 Supabase PostgreSQL Schema。
+- 正式 Schema 不以 Supabase Table Editor 手動修改為主要流程，避免資料庫與 Migration 紀錄不同步。
+- Connection string 應保存於 .NET User Secrets 或部署環境變數，不可提交至 GitHub。
+- Supabase Free 目前足以支援開發與小規模 Demo；需要不中斷服務、自動備份或超過免費額度時才評估升級。
+
 ## 重要檔案
 
 - `nuxt-gather-match/app/app.vue`：頁面入口、Step 1～3 流程切換、跨步驟草稿與投票狀態、示意參加者 Session。
@@ -84,7 +99,7 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 尚未建立 ASP.NET Core Web API、資料庫或 Deadline 背景排程。
+- 尚未建立 ASP.NET Core 8 Web API、Supabase project、EF Core Entity／Migration 或 Deadline 背景排程。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
 - 活動、朋友與投票內容都尚未寫入資料庫。
@@ -92,19 +107,21 @@
 - 正式版需要兩種識別：網址中的活動 `shareToken`，以及朋友瀏覽器保存的 `participantToken`。資料庫只保存 `participantToken` 的安全雜湊值。
 - 清除瀏覽器資料、使用無痕模式或更換裝置時，免登入參加者可能無法自動找回原身分；這是 V0.1 可接受但需清楚說明的限制。
 - 公開連結目前沒有預設受邀名單或預計人數，因此回覆進度只顯示「幾人已完成」，不顯示不可靠的分母。
-- 目前 Git 工作目錄內的專案檔案尚未建立第一次 commit。
+- GitHub 已建立 Private repository：`Chloe10430632/gather-match`，本機 `main` 已追蹤 `origin/main`。
 
 ## 建議下一步
 
-Step 3 與主揪回覆管理的純前端 UI／UX 已完成。下一次建議整理正式前後端資料流與最小資料模型，不急著串 Google Places API：
+Step 3 與主揪回覆管理的純前端 UI／UX 已完成；後端與資料庫技術方向也已確認。下一次先建立 ASP.NET Core 8 Web API 空專案，再整理最小資料模型，不急著串 Google Places API：
 
-1. 將主揪管理頁與朋友公開投票頁拆成清楚的 Nuxt 路由草案，例如 `/activities/:id/manage` 與 `/join/:shareToken`。
-2. 確認 `User → Activity → Participant → DateVote／PlaceVote` 的關聯與必要欄位。
+1. 使用者在 Visual Studio 2026 建立 ASP.NET Core 8 Web API 空專案後，確認專案位置、範本選項與目前檔案。
+2. 確認 `User → Activity → DateOption／PlaceOption／Participant → DateVote／PlaceVote` 的關聯與必要欄位。
 3. 定義 `shareToken`、`participantToken` 的產生、保存、雜湊與驗證方式。
-4. 先寫最小 RESTful API 契約，再決定是否開始建立 ASP.NET Core Web API。
-5. 依已完成的主揪回覆管理畫面，確認 API 需提供回覆人數、完成時間與逐候選項目偏好。
+4. 建立 C# Entity、`DbContext` 與 Fluent API 關聯設定。
+5. 加入 Npgsql，建立並檢查第一個 EF Core Migration，再套用至 Supabase PostgreSQL。
+6. 依資料模型撰寫最小 RESTful API 契約。
+7. 後續再將主揪管理頁與朋友公開投票頁拆成 `/activities/:id/manage` 與 `/join/:shareToken` 等正式 Nuxt 路由。
 
-建議下一個小步驟優先處理第 2 項：確認 `User → Activity → Participant → DateVote／PlaceVote` 的最小關聯與必要欄位，再據此撰寫 API 契約。
+建議下一個小步驟：使用者建立 ASP.NET Core 8 Web API 空專案後，先檢查專案設定，再一起設計最小 ERD；不要先寫 Controller 或直接在 Supabase 手動建立正式資料表。
 
 ## 啟動方式
 
@@ -135,5 +152,7 @@ npm run preview
 請先閱讀專案根目錄的 PROJECT_STATUS.md、README.md，以及 nuxt-gather-match 目前的程式碼。
 我們要延續「揪哪天？（Gathering Match）」專案。請保留現在的 Nuxt 3 + TypeScript + Tailwind 架構，Vue 狀態盡量使用 ref，不要使用 reactive；也不要先串後端或 Google Places API。
 
-今天請從 PROJECT_STATUS.md 的「建議下一步」開始，用引導式、小步驟的方式繼續。Step 3 的朋友投票純前端流程已完成，下一步優先討論並製作「主揪查看朋友回覆」的純前端管理畫面；不要先串後端或 Google Places API。
+今天請從 PROJECT_STATUS.md 的「建議下一步」開始，用引導式、小步驟的方式繼續。前端 Step 1～3 與主揪回覆管理 Demo 已完成；後端採 ASP.NET Core 8 Web API，資料庫採 Supabase PostgreSQL，ORM 採 EF Core Code First + Migration。
+
+請先檢查新建立的後端專案設定，再一起設計最小 ERD、欄位與關聯。不要先寫 Controller、直接手動建立正式資料表，或串 Google Places API。
 ```

@@ -5,8 +5,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Planning-F59E0B?style=flat-square" alt="Project status: Planning">
   <img src="https://img.shields.io/badge/Frontend-Nuxt_3_%2B_TypeScript-00DC82?style=flat-square" alt="Frontend: Nuxt 3 and TypeScript">
-  <img src="https://img.shields.io/badge/Backend-ASP.NET_Core-512BD4?style=flat-square" alt="Backend: ASP.NET Core">
-  <img src="https://img.shields.io/badge/Database-SQL_Server-CC2927?style=flat-square" alt="Database: SQL Server">
+  <img src="https://img.shields.io/badge/Backend-ASP.NET_Core_8-512BD4?style=flat-square" alt="Backend: ASP.NET Core 8">
+  <img src="https://img.shields.io/badge/Database-Supabase_PostgreSQL-3ECF8E?style=flat-square" alt="Database: Supabase PostgreSQL">
 </p>
 
 
@@ -236,15 +236,15 @@ Group Match Score
 | Layer | Technology | Why |
 | --- | --- | --- |
 | Frontend | Nuxt 3 + TypeScript + Tailwind CSS | 延續 Vue 3 Composition API，建立具型別與一致設計系統的前端 |
-| Backend | C# / ASP.NET Core Web API | 延續 .NET 經驗，建立可展示的後端核心 |
-| ORM | Entity Framework Core | 管理活動、候選項目與投票的關聯資料 |
-| Database | SQL Server | 沿用既有經驗，避免增加 MVP 學習成本 |
+| Backend | C# / ASP.NET Core 8 Web API | 延續 .NET 經驗，建立可展示的後端核心 |
+| ORM | Entity Framework Core Code First + Npgsql | 以 Migration 版本化管理 PostgreSQL Schema 與關聯資料 |
+| Database | Supabase PostgreSQL（Free） | 使用託管 PostgreSQL 累積跨資料庫與雲端資料庫經驗 |
 | API | RESTful API | 維持清楚的前後端契約與資源設計 |
 | API Docs | Swagger / OpenAPI | 支援測試、契約檢查與作品展示 |
 | Background Job | Hangfire 或 Quartz.NET | 在 Deadline 觸發結算；實作前依部署需求擇一 |
 | Places | Google Places API（V0.2） | 根據地區、預算與類型建立真實地點候選 |
 | Authentication | 後續評估 JWT / OAuth | V0.1 免註冊，會員系統不阻塞核心驗證 |
-| Deployment | 待評估 | 優先考量可重現、易維護與成本可控 |
+| Deployment | Supabase（Database）；前後端待評估 | 優先考量可重現、易維護與成本可控 |
 
 <a id="roadmap"></a>
 
@@ -269,7 +269,7 @@ Group Match Score
 
 - 從生活問題提煉需求、產品規則與成功指標
 - Nuxt 3、TypeScript、Tailwind CSS 與 ASP.NET Core 前後端整合
-- SQL 關聯式資料建模與 RESTful API 設計
+- PostgreSQL 關聯式資料建模、EF Core Migration 與 RESTful API 設計
 - 可解釋、可測試的群體決策演算法
 - Deadline 背景工作與自動結算流程
 - 測試、API 文件、部署方式及非同步協作文件
