@@ -1,18 +1,18 @@
 # 揪哪天？（Gathering Match）— 專案進度交接
 
-最後更新：2026-08-26
+最後更新：2026-08-27
 
 ## 專案位置
 
 - 工作區根目錄：`Side Project 揪團工具`
 - Nuxt 前端：`nuxt-gather-match/`
 - 前端技術：Nuxt 3、Vue 3、TypeScript、Tailwind CSS
-- 後端規劃：ASP.NET Core 8 Web API、EF Core Code First、Npgsql
+- 後端：ASP.NET Core 10 Web API（`net10.0`）、EF Core Code First、Npgsql
 - 資料庫規劃：Supabase Free 代管的 PostgreSQL
 
 ## 目前做到哪裡
 
-目前正在製作 MVP 的前端操作流程，尚未串接後端或真實地點 API。
+前端 Step 1～3 與主揪回覆管理 Demo 已完成，目前開始建立 ASP.NET Core 後端基礎；尚未串接前後端或真實地點 API。
 
 ### 已完成
 
@@ -66,7 +66,7 @@
 
 ### 已確認的後端與資料庫方向
 
-- 使用 ASP.NET Core 8 Web API 作為唯一的應用程式後端，Nuxt 不直接操作 Supabase。
+- 使用 ASP.NET Core 10 Web API 作為唯一的應用程式後端，Nuxt 不直接操作 Supabase。
 - Supabase 第一階段只作為代管 PostgreSQL，不先加入 Supabase Auth、Realtime、Storage、Edge Functions 或 Data API。
 - 使用 Entity Framework Core 作為 ORM，透過 `Npgsql.EntityFrameworkCore.PostgreSQL` 連接 PostgreSQL。
 - 採用「先設計資料模型，再用 Code First 實作」：
@@ -77,8 +77,31 @@
 - Connection string 應保存於 .NET User Secrets 或部署環境變數，不可提交至 GitHub。
 - Supabase Free 目前足以支援開發與小規模 Demo；需要不中斷服務、自動備份或超過免費額度時才評估升級。
 
+### 已完成的後端基礎
+
+- 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
+- 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
+- 已建立 Supabase project，但尚未建立 Gathering Match 正式資料表。
+- 已透過 .NET User Secrets 保存 Supabase PostgreSQL Session pooler Connection String；未將密碼寫入專案檔案。
+- 已安裝並固定以下套件版本：
+  - `Microsoft.AspNetCore.Identity.EntityFrameworkCore` `10.0.11`
+  - `Microsoft.EntityFrameworkCore.Design` `10.0.11`
+  - `Npgsql.EntityFrameworkCore.PostgreSQL` `10.0.3`
+- `dotnet-ef` CLI 已更新為 `10.0.11`。
+- 已決定主揪登入採 ASP.NET Core Identity，不使用 Supabase Auth，也不自行實作密碼雜湊。
+- 已建立 `ApplicationUser : IdentityUser<long>`，目前新增 `DisplayName` 欄位。
+- 已建立 `ApplicationDbContext : IdentityUserContext<ApplicationUser, long>`；第一階段不加入 Roles／UserRoles。
+- 已使用 Fluent API 將 `DisplayName` 設為必填且最多 50 字。
+- `Program.cs` 已註冊 Npgsql、`ApplicationDbContext`、Identity、Authentication 與 Authorization。
+- 尚未加入 `MapIdentityApi<ApplicationUser>()`，因此還沒有開放註冊／登入 endpoints。
+- 已決定 C# 與 PostgreSQL 資料表／欄位統一使用 PascalCase，不加入 `EFCore.NamingConventions`。
+
 ## 重要檔案
 
+- `DATABASE_DESIGN_DRAFT.md`：最小 ERD、資料表欄位、關聯、Identity 與外部資料保存策略草案。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Models/ApplicationUser.cs`：ASP.NET Core Identity 使用者 Entity。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Data/ApplicationDbContext.cs`：Identity／EF Core DbContext 與 Fluent API。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Program.cs`：Npgsql、Identity、Authentication 與 Authorization 服務註冊。
 - `nuxt-gather-match/app/app.vue`：頁面入口、Step 1～3 流程切換、跨步驟草稿與投票狀態、示意參加者 Session。
 - `nuxt-gather-match/app/components/ActivityProgress.vue`：四階段進度條。
 - `nuxt-gather-match/app/components/ActivitySetupForm.vue`：Step 1 表單與驗證。
@@ -99,7 +122,7 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 尚未建立 ASP.NET Core 8 Web API、Supabase project、EF Core Entity／Migration 或 Deadline 背景排程。
+- 已建立 ASP.NET Core 10 Web API 與 Supabase project；尚未建立第一個 EF Core Migration、Gathering Match 業務 Entity 或 Deadline 背景排程。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
 - 活動、朋友與投票內容都尚未寫入資料庫。
@@ -111,17 +134,17 @@
 
 ## 建議下一步
 
-Step 3 與主揪回覆管理的純前端 UI／UX 已完成；後端與資料庫技術方向也已確認。下一次先建立 ASP.NET Core 8 Web API 空專案，再整理最小資料模型，不急著串 Google Places API：
+ASP.NET Core Identity、EF Core、Npgsql、User Secrets 與 `ApplicationDbContext` 基礎已完成。下次延續引導式開發，由使用者親手輸入程式碼：
 
-1. 使用者在 Visual Studio 2026 建立 ASP.NET Core 8 Web API 空專案後，確認專案位置、範本選項與目前檔案。
-2. 確認 `User → Activity → DateOption／PlaceOption／Participant → DateVote／PlaceVote` 的關聯與必要欄位。
-3. 定義 `shareToken`、`participantToken` 的產生、保存、雜湊與驗證方式。
-4. 建立 C# Entity、`DbContext` 與 Fluent API 關聯設定。
-5. 加入 Npgsql，建立並檢查第一個 EF Core Migration，再套用至 Supabase PostgreSQL。
-6. 依資料模型撰寫最小 RESTful API 契約。
-7. 後續再將主揪管理頁與朋友公開投票頁拆成 `/activities/:id/manage` 與 `/join/:shareToken` 等正式 Nuxt 路由。
+1. 在 `ApplicationUser` 補上尚未實作的 `IsActive`、`CreatedAt`、`UpdatedAt`。
+2. 建置並檢查實際程式碼。
+3. 建立第一個 `InitialIdentity` Migration，但先不要執行 `database update`。
+4. 閱讀 Migration，確認只包含預期的 Identity User、Claim、Login、Token 資料表，沒有 Roles／UserRoles。
+5. 確認表名與欄位維持 PascalCase，以及 `DisplayName` 的必要性與長度限制。
+6. 檢查 Migration 後，再由使用者決定是否套用至 Supabase PostgreSQL。
+7. Identity Schema 確認後，再逐一建立 `Activity` 等 Gathering Match 業務 Entity。
 
-建議下一個小步驟：使用者建立 ASP.NET Core 8 Web API 空專案後，先檢查專案設定，再一起設計最小 ERD；不要先寫 Controller 或直接在 Supabase 手動建立正式資料表。
+建議下一個小步驟：補完 `ApplicationUser` 的三個專案欄位；不要直接執行 `dotnet ef database update`、手動建立 Supabase 正式資料表或串 Google Places API。
 
 ## 啟動方式
 
@@ -152,7 +175,7 @@ npm run preview
 請先閱讀專案根目錄的 PROJECT_STATUS.md、README.md，以及 nuxt-gather-match 目前的程式碼。
 我們要延續「揪哪天？（Gathering Match）」專案。請保留現在的 Nuxt 3 + TypeScript + Tailwind 架構，Vue 狀態盡量使用 ref，不要使用 reactive；也不要先串後端或 Google Places API。
 
-今天請從 PROJECT_STATUS.md 的「建議下一步」開始，用引導式、小步驟的方式繼續。前端 Step 1～3 與主揪回覆管理 Demo 已完成；後端採 ASP.NET Core 8 Web API，資料庫採 Supabase PostgreSQL，ORM 採 EF Core Code First + Migration。
+今天請從 PROJECT_STATUS.md 的「建議下一步」開始，用引導式、小步驟的方式繼續，由我親手輸入後端程式碼。前端 Step 1～3 與主揪回覆管理 Demo 已完成；後端採 ASP.NET Core 10 Web API、ASP.NET Core Identity、EF Core Code First + Migration 與 Npgsql，資料庫採 Supabase PostgreSQL。
 
-請先檢查新建立的後端專案設定，再一起設計最小 ERD、欄位與關聯。不要先寫 Controller、直接手動建立正式資料表，或串 Google Places API。
+後端已完成 `ApplicationUser`、`ApplicationDbContext`、User Secrets 與 Identity／Npgsql 服務註冊，但尚未建立 Migration 或正式資料表。請先檢查實際程式碼，再從補上 `ApplicationUser` 的 `IsActive`、`CreatedAt`、`UpdatedAt` 繼續；不要直接執行 `database update`、先寫 Controller、手動建立正式資料表或串 Google Places API。
 ```

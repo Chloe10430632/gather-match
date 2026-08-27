@@ -1,0 +1,6 @@
+@asp_gather_match_HostAddress = http://localhost:5138
+
+GET {{asp_gather_match_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

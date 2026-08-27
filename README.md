@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Planning-F59E0B?style=flat-square" alt="Project status: Planning">
   <img src="https://img.shields.io/badge/Frontend-Nuxt_3_%2B_TypeScript-00DC82?style=flat-square" alt="Frontend: Nuxt 3 and TypeScript">
-  <img src="https://img.shields.io/badge/Backend-ASP.NET_Core_8-512BD4?style=flat-square" alt="Backend: ASP.NET Core 8">
+  <img src="https://img.shields.io/badge/Backend-ASP.NET_Core_10-512BD4?style=flat-square" alt="Backend: ASP.NET Core 10">
   <img src="https://img.shields.io/badge/Database-Supabase_PostgreSQL-3ECF8E?style=flat-square" alt="Database: Supabase PostgreSQL">
 </p>
 
@@ -236,7 +236,7 @@ Group Match Score
 | Layer | Technology | Why |
 | --- | --- | --- |
 | Frontend | Nuxt 3 + TypeScript + Tailwind CSS | 延續 Vue 3 Composition API，建立具型別與一致設計系統的前端 |
-| Backend | C# / ASP.NET Core 8 Web API | 延續 .NET 經驗，建立可展示的後端核心 |
+| Backend | C# / ASP.NET Core 10 Web API | 延續 .NET 經驗，建立可展示的後端核心 |
 | ORM | Entity Framework Core Code First + Npgsql | 以 Migration 版本化管理 PostgreSQL Schema 與關聯資料 |
 | Database | Supabase PostgreSQL（Free） | 使用託管 PostgreSQL 累積跨資料庫與雲端資料庫經驗 |
 | API | RESTful API | 維持清楚的前後端契約與資源設計 |
@@ -256,7 +256,7 @@ Group Match Score
 - [ ] 定義 Activity、候選項目、參加者及投票模型
 - [ ] 建立 Group Match 測試案例與最低成團門檻
 - [ ] 定義 RESTful API 契約
-- [ ] 建立 ASP.NET Core Web API
+- [x] 建立 ASP.NET Core 10 Web API 範本專案
 - [ ] 實作活動、投票與結算流程
 - [x] 建立 Nuxt 3 + TypeScript + Tailwind CSS 前端骨架
 - [ ] 導入背景排程及整合測試
