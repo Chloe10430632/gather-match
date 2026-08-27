@@ -81,7 +81,7 @@
 
 - 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
 - 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
-- 已建立 Supabase project，但尚未建立 Gathering Match 正式資料表。
+- 已建立 Supabase project，並已將 `InitialIdentity` Migration 套用到 Supabase PostgreSQL。
 - 已透過 .NET User Secrets 保存 Supabase PostgreSQL Session pooler Connection String；未將密碼寫入專案檔案。
 - 已安裝並固定以下套件版本：
   - `Microsoft.AspNetCore.Identity.EntityFrameworkCore` `10.0.11`
@@ -89,12 +89,17 @@
   - `Npgsql.EntityFrameworkCore.PostgreSQL` `10.0.3`
 - `dotnet-ef` CLI 已更新為 `10.0.11`。
 - 已決定主揪登入採 ASP.NET Core Identity，不使用 Supabase Auth，也不自行實作密碼雜湊。
-- 已建立 `ApplicationUser : IdentityUser<long>`，目前新增 `DisplayName` 欄位。
+- 已建立 `ApplicationUser : IdentityUser<long>`，包含 `DisplayName`、`IsActive`、`CreatedAt`、`UpdatedAt`。
 - 已建立 `ApplicationDbContext : IdentityUserContext<ApplicationUser, long>`；第一階段不加入 Roles／UserRoles。
 - 已使用 Fluent API 將 `DisplayName` 設為必填且最多 50 字。
 - `Program.cs` 已註冊 Npgsql、`ApplicationDbContext`、Identity、Authentication 與 Authorization。
 - 尚未加入 `MapIdentityApi<ApplicationUser>()`，因此還沒有開放註冊／登入 endpoints。
 - 已決定 C# 與 PostgreSQL 資料表／欄位統一使用 PascalCase，不加入 `EFCore.NamingConventions`。
+- 已建立並套用 `InitialIdentity` Migration；資料庫包含 `AspNetUsers`、`AspNetUserClaims`、`AspNetUserLogins`、`AspNetUserTokens`。
+- 已建立活動規劃資料模型：`ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption`。
+- 已在 Fluent API 設定活動資料的欄位長度、預設值、唯一限制、外鍵、刪除行為與必要 Check Constraints。
+- 已建立並套用 `AddActivityPlanning` Migration；Supabase 已有六張活動規劃資料表，建置結果為 0 個警告、0 個錯誤。
+- 已建立並套用 `EnableRowLevelSecurity` Migration，為四張 Identity 表及六張業務表啟用 RLS；目前不建立 Data API 公開 Policy，資料統一由 ASP.NET Core 後端存取。
 
 ## 重要檔案
 
@@ -122,7 +127,7 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 已建立 ASP.NET Core 10 Web API 與 Supabase project；尚未建立第一個 EF Core Migration、Gathering Match 業務 Entity 或 Deadline 背景排程。
+- 已建立 ASP.NET Core 10 Web API、Identity Schema 與第一批 Gathering Match 業務 Entity；尚未建立活動 API、投票 Entity 或 Deadline 背景排程。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
 - 活動、朋友與投票內容都尚未寫入資料庫。
@@ -134,17 +139,14 @@
 
 ## 建議下一步
 
-ASP.NET Core Identity、EF Core、Npgsql、User Secrets 與 `ApplicationDbContext` 基礎已完成。下次延續引導式開發，由使用者親手輸入程式碼：
+Identity Schema、第一批活動規劃 Entity 與 RLS 已套用到 Supabase。下一步：
 
-1. 在 `ApplicationUser` 補上尚未實作的 `IsActive`、`CreatedAt`、`UpdatedAt`。
-2. 建置並檢查實際程式碼。
-3. 建立第一個 `InitialIdentity` Migration，但先不要執行 `database update`。
-4. 閱讀 Migration，確認只包含預期的 Identity User、Claim、Login、Token 資料表，沒有 Roles／UserRoles。
-5. 確認表名與欄位維持 PascalCase，以及 `DisplayName` 的必要性與長度限制。
-6. 檢查 Migration 後，再由使用者決定是否套用至 Supabase PostgreSQL。
-7. Identity Schema 確認後，再逐一建立 `Activity` 等 Gathering Match 業務 Entity。
+1. 建立活動功能的三層式架構：Repository（資料存取）、Service（商業規則）、Controller（HTTP API）。
+2. 先完成「建立活動」一條可測試的垂直流程，再加入查詢與修改功能。
+3. 為活動類型、縣市與行政區準備可重複匯入的參照資料。
+4. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
 
-建議下一個小步驟：補完 `ApplicationUser` 的三個專案欄位；不要直接執行 `dotnet ef database update`、手動建立 Supabase 正式資料表或串 Google Places API。
+建議下一個小步驟：建立「新增活動」API 的 Request DTO、Repository、Service 與 Controller，並用 OpenAPI 驗證完整流程。
 
 ## 啟動方式
 
@@ -172,10 +174,10 @@ npm run preview
 ## 開新對話時可直接貼的文字
 
 ```text
-請先閱讀專案根目錄的 PROJECT_STATUS.md、README.md，以及 nuxt-gather-match 目前的程式碼。
-我們要延續「揪哪天？（Gathering Match）」專案。請保留現在的 Nuxt 3 + TypeScript + Tailwind 架構，Vue 狀態盡量使用 ref，不要使用 reactive；也不要先串後端或 Google Places API。
+請先閱讀專案根目錄的 PROJECT_STATUS.md、README.md、DATABASE_DESIGN_DRAFT.md，以及前後端目前的程式碼。
+我們要延續「揪哪天？（Gathering Match）」專案。請保留 Nuxt 3 + TypeScript + Tailwind 與 ASP.NET Core 10 Web API + EF Core + Npgsql 架構；Nuxt 不直接操作 Supabase。
 
-今天請從 PROJECT_STATUS.md 的「建議下一步」開始，用引導式、小步驟的方式繼續，由我親手輸入後端程式碼。前端 Step 1～3 與主揪回覆管理 Demo 已完成；後端採 ASP.NET Core 10 Web API、ASP.NET Core Identity、EF Core Code First + Migration 與 Npgsql，資料庫採 Supabase PostgreSQL。
+前端 Step 1～3 與主揪回覆管理 Demo 已完成。後端已建立 ASP.NET Core Identity，以及 ActivityType、City、District、Activity、DateOption、PlaceOption；InitialIdentity、AddActivityPlanning、EnableRowLevelSecurity 三個 Migration 都已套用至 Supabase PostgreSQL。
 
-後端已完成 `ApplicationUser`、`ApplicationDbContext`、User Secrets 與 Identity／Npgsql 服務註冊，但尚未建立 Migration 或正式資料表。請先檢查實際程式碼，再從補上 `ApplicationUser` 的 `IsActive`、`CreatedAt`、`UpdatedAt` 繼續；不要直接執行 `database update`、先寫 Controller、手動建立正式資料表或串 Google Places API。
+請先檢查實際程式碼與 Git 狀態，再從「新增活動」API 開始建立三層式架構：Request DTO、Repository、Service、Controller。先完成一條可建置、可透過 OpenAPI 驗證的垂直流程；解釋每一層的責任，但由 Codex 處理重複程式碼。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
 ```

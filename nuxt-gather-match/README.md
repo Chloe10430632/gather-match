@@ -2,6 +2,15 @@
 
 「揪哪天?（Gathering Match）」的 Nuxt 3 前端專案。
 
+## Current Status
+
+- 已完成 Step 1～3 與主揪回覆管理的純前端 Demo。
+- 活動與投票資料目前仍保存在前端狀態及 `localStorage`，尚未呼叫後端 API。
+- ASP.NET Core 後端已完成 Identity、活動規劃資料模型與 Supabase PostgreSQL Schema。
+- 下一個整合階段會先建立「新增活動」API，再由這個前端送出活動、候選日期與候選地點。
+
+完整專案進度與下一步請見根目錄的 [`PROJECT_STATUS.md`](../PROJECT_STATUS.md)。
+
 ## Setup
 
 ```bash

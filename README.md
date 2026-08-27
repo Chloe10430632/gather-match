@@ -3,7 +3,7 @@
 <h3 align="center">擺脫科技冷漠！快速決定哪天、去哪裡，讓聚會不再停在群組訊息裡。</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Planning-F59E0B?style=flat-square" alt="Project status: Planning">
+  <img src="https://img.shields.io/badge/Status-In_Development-0F766E?style=flat-square" alt="Project status: In development">
   <img src="https://img.shields.io/badge/Frontend-Nuxt_3_%2B_TypeScript-00DC82?style=flat-square" alt="Frontend: Nuxt 3 and TypeScript">
   <img src="https://img.shields.io/badge/Backend-ASP.NET_Core_10-512BD4?style=flat-square" alt="Backend: ASP.NET Core 10">
   <img src="https://img.shields.io/badge/Database-Supabase_PostgreSQL-3ECF8E?style=flat-square" alt="Database: Supabase PostgreSQL">
@@ -11,7 +11,18 @@
 
 
 > [!IMPORTANT]
-> 本專案目前處於產品規格與 MVP 設計階段，README 描述的是規劃方向，不代表所有功能皆已完成。
+> 本專案目前正在開發 MVP。Nuxt 前端流程為 Demo 狀態；ASP.NET Core Identity、第一批活動資料模型與 Supabase PostgreSQL Schema 已建立，但前後端尚未串接。
+
+## 🚧 Current Progress
+
+- Nuxt 3 前端已完成建立活動、確認地點、朋友投票與主揪回覆管理的 Demo 流程。
+- ASP.NET Core 10 Web API 已完成 Identity、EF Core、Npgsql 與 User Secrets 基礎設定。
+- Supabase PostgreSQL 已套用 `InitialIdentity`、`AddActivityPlanning`、`EnableRowLevelSecurity` 三個 Migration。
+- 已建立 `ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption` 資料模型及關聯。
+- Identity 與目前業務表均已啟用 RLS，不開放前端透過 Supabase Data API 直接存取。
+- 下一步是建立「新增活動」API 的 Repository、Service、Controller 與 Request DTO。
+
+詳細交接請見 [`PROJECT_STATUS.md`](./PROJECT_STATUS.md)。
 
 <a id="vision"></a>
 
@@ -227,7 +238,7 @@ Group Match Score
 | `FormationResult` | 最終方案與計算摘要 |
 
 > [!NOTE]
-> 此資料模型仍是設計草案，欄位、關聯及限制會在 API 與資料庫設計階段確認。
+> `Activity`、`DateOption`、`PlaceOption` 及其參照資料已完成第一版；`Participant`、投票與結算模型仍是後續設計範圍。
 
 <a id="tech-stack"></a>
 
@@ -253,10 +264,13 @@ Group Match Score
 - [x] 定義生活痛點與產品願景
 - [x] 確認核心指標為 Formation Rate
 - [x] 切分 V0.1 與 V0.2 功能範圍
-- [ ] 定義 Activity、候選項目、參加者及投票模型
+- [x] 定義 Activity 與候選項目的第一版資料模型
+- [ ] 定義參加者、投票與結算模型
 - [ ] 建立 Group Match 測試案例與最低成團門檻
 - [ ] 定義 RESTful API 契約
 - [x] 建立 ASP.NET Core 10 Web API 範本專案
+- [x] 建立 ASP.NET Core Identity 與 EF Core Migration 基礎
+- [x] 將 Identity、活動規劃 Schema 與 RLS 套用至 Supabase PostgreSQL
 - [ ] 實作活動、投票與結算流程
 - [x] 建立 Nuxt 3 + TypeScript + Tailwind CSS 前端骨架
 - [ ] 導入背景排程及整合測試
