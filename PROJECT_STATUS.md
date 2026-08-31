@@ -1,6 +1,6 @@
 # 揪哪天？（Gathering Match）— 專案進度交接
 
-最後更新：2026-08-27
+最後更新：2026-08-31
 
 ## 專案位置
 
@@ -100,6 +100,24 @@
 - 已在 Fluent API 設定活動資料的欄位長度、預設值、唯一限制、外鍵、刪除行為與必要 Check Constraints。
 - 已建立並套用 `AddActivityPlanning` Migration；Supabase 已有六張活動規劃資料表，建置結果為 0 個警告、0 個錯誤。
 - 已建立並套用 `EnableRowLevelSecurity` Migration，為四張 Identity 表及六張業務表啟用 RLS；目前不建立 Data API 公開 Policy，資料統一由 ASP.NET Core 後端存取。
+- 已建立 `POST /api/activities` 新增活動 API 的第一條垂直流程：
+  - Request／Response DTO 定義建立活動、候選日期與 1～5 個自訂候選地點的 API 契約。
+  - Repository 負責檢查有效參照資料，並以 EF Core 一次儲存 Activity aggregate。
+  - Service 負責預算、Deadline、候選日期／地點及縣市／行政區關係等商業驗證。
+  - Controller 從登入使用者的 Identity claim 取得 `HostUserId`，不接受客戶端指定主揪 ID。
+  - 公開分享 Token 只在建立成功時回傳一次，資料庫僅保存 SHA-256 雜湊。
+- OpenAPI 已確認列出此 endpoint 與 `201`、`400`、`401` 回應；未登入呼叫實測回傳 `401`。
+- Development 環境已加入 Swagger UI，可從 `/swagger` 查看及操作 API；正式環境不開放。
+- API 已建立泛型 `ApiResponse<T>` 統一外層，包含 `success`、`data`、`error` 與 `traceId`：
+  - 建立活動成功以 `ApiResponse<CreateActivityResponse>` 回傳。
+  - DTO／商業規則驗證、401、403、404 均使用相同錯誤結構與正確 HTTP Status Code。
+  - 未預期 Exception 由 `IExceptionHandler` 集中記錄並回傳不含內部細節的 500 Response。
+  - 預期中的商業驗證仍由 Service Result 表達，不使用 Exception 控制流程。
+- 已建立 `SeedActivityTypes` Migration，透過 EF Core `HasData` 管理六筆固定活動類型：`meal`、`coffee`、`outdoor`、`culture`、`travel`、`other`。
+- `SeedActivityTypes` 已套用到 Supabase PostgreSQL；執行日誌確認插入六筆資料、調整 identity sequence，並寫入 `__EFMigrationsHistory`。
+- 已建立台灣位置參照資料工具與完整 JSON 快照：22 個縣市、368 個行政區；應用程式 validator 已確認代碼格式、唯一性與隸屬關係。
+- `LocationReferenceImporter` 已將 22 個縣市與 368 個行政區匯入 Supabase；第二次執行新增、更新、停用皆為 0，已確認可重複執行且不會重複插入。
+- Identity API 仍未對外映射；自訂註冊／登入契約尚未完成，因此目前尚不能由一般使用者取得新增活動所需的登入身分。
 
 ## 重要檔案
 
@@ -107,6 +125,16 @@
 - `asp-gather-match/asp-gather-match/asp-gather-match/Models/ApplicationUser.cs`：ASP.NET Core Identity 使用者 Entity。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Data/ApplicationDbContext.cs`：Identity／EF Core DbContext 與 Fluent API。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Program.cs`：Npgsql、Identity、Authentication 與 Authorization 服務註冊。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Contracts/Activities/`：新增活動 Request／Response DTO。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Contracts/Common/`：泛型 API Response 與統一錯誤格式。
+- `asp-gather-match/asp-gather-match/asp-gather-match/ErrorHandling/GlobalExceptionHandler.cs`：未預期 Exception 的全域處理。
+- `LOCATION_REFERENCE_DATA.md`：台灣縣市／行政區官方來源、代碼欄位與匯入策略。
+- `scripts/Update-LocationReferenceSnapshot.ps1`：從 NLSC API 產生並檢查位置資料 JSON 快照。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Data/LocationReferenceImporter.cs`：位置快照驗證及 Transaction upsert。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Data/SeedData/taiwan-location-reference.json`：版本化的完整位置資料快照。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Repositories/`：活動資料存取介面與 EF Core 實作。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Services/`：新增活動商業規則與建立流程。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Controllers/ActivitiesController.cs`：受 Identity 保護的新增活動 HTTP endpoint。
 - `nuxt-gather-match/app/app.vue`：頁面入口、Step 1～3 流程切換、跨步驟草稿與投票狀態、示意參加者 Session。
 - `nuxt-gather-match/app/components/ActivityProgress.vue`：四階段進度條。
 - `nuxt-gather-match/app/components/ActivitySetupForm.vue`：Step 1 表單與驗證。
@@ -127,7 +155,9 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 已建立 ASP.NET Core 10 Web API、Identity Schema 與第一批 Gathering Match 業務 Entity；尚未建立活動 API、投票 Entity 或 Deadline 背景排程。
+- 已建立新增活動 API；尚未建立活動查詢／修改 API、投票 Entity 或 Deadline 背景排程。
+- `ActivityType` Seed 與 City、District 參照資料皆已套用；新增活動的成功寫入流程仍待主揪註冊／登入 API 完成後，以真實登入身分驗證。
+- Identity API 尚未映射，登入與註冊契約仍需另外設計；目前只能確認新增活動 endpoint 會拒絕未登入請求。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
 - 活動、朋友與投票內容都尚未寫入資料庫。
@@ -139,14 +169,24 @@
 
 ## 建議下一步
 
-Identity Schema、第一批活動規劃 Entity 與 RLS 已套用到 Supabase。下一步：
+Identity Schema、第一批活動規劃 Entity、RLS 與新增活動 API 垂直流程已完成。下一步：
 
-1. 建立活動功能的三層式架構：Repository（資料存取）、Service（商業規則）、Controller（HTTP API）。
-2. 先完成「建立活動」一條可測試的垂直流程，再加入查詢與修改功能。
-3. 為活動類型、縣市與行政區準備可重複匯入的參照資料。
+1. 設計包含 `DisplayName` 的主揪註冊／登入契約，再映射可實際使用的 Identity endpoints。
+2. 使用真實登入身分與參照資料，驗證新增活動、候選日期與候選地點的完整資料庫寫入。
+3. 驗證完成後再加入活動查詢與修改功能。
 4. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
 
-建議下一個小步驟：建立「新增活動」API 的 Request DTO、Repository、Service 與 Controller，並用 OpenAPI 驗證完整流程。
+建議下一個小步驟：設計並實作包含 `DisplayName` 的主揪註冊／登入 API，讓 Swagger 可以取得登入身分並測試新增活動。
+
+### 部署前可觀測性待辦
+
+目前先確定 Logging 原則，不立即導入 ELK 套件或基礎設施：
+
+1. 應用程式持續使用 `ILogger`，避免商業程式碼綁定特定雲端或 Log 平台。
+2. Docker 化時將 Log 改為包含 `trace.id`、`service.name` 等欄位的 ECS 結構化 JSON，輸出至 `stdout`／`stderr`，不只寫在 Container 內部檔案。
+3. 本機 Docker 環境完成後，再以 Elastic Agent（或學習階段的 Filebeat）收集 Log，接到 Elasticsearch 與 Kibana 驗證集中查詢。
+4. 選定 AWS／Azure／GCP 與部署方式後，再決定使用 Elastic Cloud 或自行管理 Elastic Stack，並設定保留期限、Lifecycle Policy、敏感資料遮罩與告警。
+5. 此項排在「Docker 化」之後、「部署真人測試 MVP」之前；目前不阻塞活動、登入與投票功能開發。
 
 ## 啟動方式
 
@@ -179,5 +219,5 @@ npm run preview
 
 前端 Step 1～3 與主揪回覆管理 Demo 已完成。後端已建立 ASP.NET Core Identity，以及 ActivityType、City、District、Activity、DateOption、PlaceOption；InitialIdentity、AddActivityPlanning、EnableRowLevelSecurity 三個 Migration 都已套用至 Supabase PostgreSQL。
 
-請先檢查實際程式碼與 Git 狀態，再從「新增活動」API 開始建立三層式架構：Request DTO、Repository、Service、Controller。先完成一條可建置、可透過 OpenAPI 驗證的垂直流程；解釋每一層的責任，但由 Codex 處理重複程式碼。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
+請先檢查實際程式碼與 Git 狀態，再設計並實作包含 DisplayName 的主揪註冊／登入 API，讓 Swagger 可以取得登入身分並測試既有的新增活動垂直流程。解釋每一層的責任，但由 Codex 處理重複程式碼。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
 ```

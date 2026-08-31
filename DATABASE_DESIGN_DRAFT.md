@@ -332,10 +332,12 @@ PostgreSQL 不會自動替每個 Foreign Key 建立索引，因此 EF Core Migra
 
 建議自行建立 `cities` 與 `districts` 參照表，但資料不必手打，也不必每次由前端即時呼叫政府 API。
 
-建議流程：
+已於 2026-08-31 核對內政部國土測繪中心代碼服務，詳細決策見 `LOCATION_REFERENCE_DATA.md`。採用五碼 `countycode01` 作為 `City.GovernmentCode`、八碼 `towncode` 作為 `District.GovernmentCode`；一碼 `countycode` 及 `towncode01` 只作為官方 API 呼叫參數，不保存為主要識別。
 
-1. 使用內政部國土測繪中心的官方縣市／鄉鎮市區代碼資料作為來源。
-2. 將需要的代碼與名稱轉成 EF Core Seed Data 或一份可重複執行的匯入程式。
+確認流程：
+
+1. 使用內政部國土測繪中心的官方縣市／鄉鎮市區（戶政）代碼資料作為來源。
+2. 將資料轉成版本化 JSON 快照，再由可重複執行的匯入程式寫入 PostgreSQL。
 3. 應用程式平常只讀自己的 PostgreSQL。
 4. 行政區調整時再人工觸發同步並檢查差異，不在使用者請求中即時依賴政府 API。
 

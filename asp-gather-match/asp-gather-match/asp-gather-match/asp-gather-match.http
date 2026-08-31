@@ -1,6 +1,37 @@
 @asp_gather_match_HostAddress = http://localhost:5138
+@access_token = replace-with-access-token
 
-GET {{asp_gather_match_HostAddress}}/weatherforecast/
+GET {{asp_gather_match_HostAddress}}/openapi/v1.json
 Accept: application/json
+
+###
+
+POST {{asp_gather_match_HostAddress}}/api/activities
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "週末聚餐",
+  "activityTypeId": 1,
+  "budgetMin": 500,
+  "budgetMax": 800,
+  "cityId": 1,
+  "districtId": 1,
+  "deadlineAt": "2026-09-05T12:00:00+08:00",
+  "dateOptions": [
+    {
+      "optionDate": "2026-09-12"
+    },
+    {
+      "optionDate": "2026-09-13"
+    }
+  ],
+  "placeOptions": [
+    {
+      "displayLabel": "候選餐廳 A",
+      "customAddress": "台北市示意地址"
+    }
+  ]
+}
 
 ###

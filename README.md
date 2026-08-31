@@ -20,7 +20,12 @@
 - Supabase PostgreSQL 已套用 `InitialIdentity`、`AddActivityPlanning`、`EnableRowLevelSecurity` 三個 Migration。
 - 已建立 `ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption` 資料模型及關聯。
 - Identity 與目前業務表均已啟用 RLS，不開放前端透過 Supabase Data API 直接存取。
-- 下一步是建立「新增活動」API 的 Repository、Service、Controller 與 Request DTO。
+- 已完成受 Identity 保護的「新增活動」API 第一條垂直流程。
+- 六筆活動類型的 `SeedActivityTypes` Migration 已套用至 Supabase。
+- 已確認台灣縣市／行政區官方代碼來源與匯入策略，詳見 `LOCATION_REFERENCE_DATA.md`。
+- 已將完整 JSON 快照中的 22 個縣市與 368 個行政區透過 Transaction 匯入器寫入 Supabase，並以第二次執行確認不會重複新增。
+- Development 環境可由 `http://localhost:5138/swagger` 開啟 Swagger UI。
+- API 使用 `ApiResponse<T>` 統一成功與錯誤外層，並由全域 `IExceptionHandler` 處理未預期的伺服器錯誤。
 
 詳細交接請見 [`PROJECT_STATUS.md`](./PROJECT_STATUS.md)。
 
@@ -255,6 +260,7 @@ Group Match Score
 | Background Job | Hangfire 或 Quartz.NET | 在 Deadline 觸發結算；實作前依部署需求擇一 |
 | Places | Google Places API（V0.2） | 根據地區、預算與類型建立真實地點候選 |
 | Authentication | 後續評估 JWT / OAuth | V0.1 免註冊，會員系統不阻塞核心驗證 |
+| Observability | `ILogger`；部署前評估 Elastic Stack | Container 輸出 ECS JSON 至 stdout／stderr，再集中收集與查詢 |
 | Deployment | Supabase（Database）；前後端待評估 | 優先考量可重現、易維護與成本可控 |
 
 <a id="roadmap"></a>
@@ -271,9 +277,14 @@ Group Match Score
 - [x] 建立 ASP.NET Core 10 Web API 範本專案
 - [x] 建立 ASP.NET Core Identity 與 EF Core Migration 基礎
 - [x] 將 Identity、活動規劃 Schema 與 RLS 套用至 Supabase PostgreSQL
-- [ ] 實作活動、投票與結算流程
+- [x] 套用並驗證 `SeedActivityTypes` 活動類型參照資料
+- [ ] 實作活動、投票與結算流程（新增活動 API 第一版已完成）
 - [x] 建立 Nuxt 3 + TypeScript + Tailwind CSS 前端骨架
 - [ ] 導入背景排程及整合測試
+- [ ] 建立前後端 Docker 化與可重現的 Container 開發環境
+- [ ] 將後端 Log 改為 ECS 結構化 JSON，輸出至 stdout／stderr
+- [ ] 以 Elastic Agent／Filebeat 串接 Elasticsearch、Kibana，驗證以 `trace.id` 集中查詢
+- [ ] 選定雲端後設定 Log 保存期限、Lifecycle Policy、敏感資料遮罩與告警
 - [ ] 部署可供真人測試的 MVP
 - [ ] 串接真實地點推薦
 

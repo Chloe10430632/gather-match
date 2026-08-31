@@ -49,6 +49,67 @@ namespace asp_gather_match.Data
                 entity.Property(type => type.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.HasIndex(type => type.Code).IsUnique();
                 entity.HasIndex(type => type.Name).IsUnique();
+                entity.HasData(
+                    new ActivityType
+                    {
+                        Id = 1,
+                        Code = "meal",
+                        Name = "聚餐",
+                        SortOrder = 1,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    },
+                    new ActivityType
+                    {
+                        Id = 2,
+                        Code = "coffee",
+                        Name = "咖啡聊天",
+                        SortOrder = 2,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    },
+                    new ActivityType
+                    {
+                        Id = 3,
+                        Code = "outdoor",
+                        Name = "戶外活動",
+                        SortOrder = 3,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    },
+                    new ActivityType
+                    {
+                        Id = 4,
+                        Code = "culture",
+                        Name = "看展／電影",
+                        SortOrder = 4,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    },
+                    new ActivityType
+                    {
+                        Id = 5,
+                        Code = "travel",
+                        Name = "旅行",
+                        SortOrder = 5,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    },
+                    new ActivityType
+                    {
+                        Id = 6,
+                        Code = "other",
+                        Name = "其他",
+                        SortOrder = 6,
+                        IsActive = true,
+                        CreatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero),
+                        UpdatedAt = new DateTimeOffset(2026, 8, 31, 0, 0, 0, TimeSpan.Zero)
+                    });
             });
 
             modelBuilder.Entity<City>(entity =>

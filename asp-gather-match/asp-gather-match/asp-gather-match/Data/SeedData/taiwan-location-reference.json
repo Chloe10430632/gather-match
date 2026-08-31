@@ -1,0 +1,2002 @@
+{
+  "source": "內政部國土測繪中心 ListCounty / ListTown1",
+  "sourceUrl": "https://api.nlsc.gov.tw/other",
+  "generatedAt": "2026-08-31T08:48:26.7823765+00:00",
+  "isCompleteSnapshot": true,
+  "cities": [
+    {
+      "governmentCode": "63000",
+      "name": "臺北市",
+      "sortOrder": 1,
+      "districts": [
+        {
+          "governmentCode": "63000010",
+          "name": "松山區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "63000020",
+          "name": "信義區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "63000030",
+          "name": "大安區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "63000040",
+          "name": "中山區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "63000050",
+          "name": "中正區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "63000060",
+          "name": "大同區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "63000070",
+          "name": "萬華區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "63000080",
+          "name": "文山區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "63000090",
+          "name": "南港區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "63000100",
+          "name": "內湖區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "63000110",
+          "name": "士林區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "63000120",
+          "name": "北投區",
+          "sortOrder": 12
+        }
+      ]
+    },
+    {
+      "governmentCode": "66000",
+      "name": "臺中市",
+      "sortOrder": 2,
+      "districts": [
+        {
+          "governmentCode": "66000010",
+          "name": "中區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "66000020",
+          "name": "東區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "66000030",
+          "name": "南區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "66000040",
+          "name": "西區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "66000050",
+          "name": "北區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "66000060",
+          "name": "西屯區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "66000070",
+          "name": "南屯區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "66000080",
+          "name": "北屯區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "66000090",
+          "name": "豐原區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "66000100",
+          "name": "東勢區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "66000110",
+          "name": "大甲區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "66000120",
+          "name": "清水區",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "66000130",
+          "name": "沙鹿區",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "66000140",
+          "name": "梧棲區",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "66000150",
+          "name": "后里區",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "66000160",
+          "name": "神岡區",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "66000170",
+          "name": "潭子區",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "66000180",
+          "name": "大雅區",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "66000190",
+          "name": "新社區",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "66000200",
+          "name": "石岡區",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "66000210",
+          "name": "外埔區",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "66000220",
+          "name": "大安區",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "66000230",
+          "name": "烏日區",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "66000240",
+          "name": "大肚區",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "66000250",
+          "name": "龍井區",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "66000260",
+          "name": "霧峰區",
+          "sortOrder": 26
+        },
+        {
+          "governmentCode": "66000270",
+          "name": "太平區",
+          "sortOrder": 27
+        },
+        {
+          "governmentCode": "66000280",
+          "name": "大里區",
+          "sortOrder": 28
+        },
+        {
+          "governmentCode": "66000290",
+          "name": "和平區",
+          "sortOrder": 29
+        }
+      ]
+    },
+    {
+      "governmentCode": "10017",
+      "name": "基隆市",
+      "sortOrder": 3,
+      "districts": [
+        {
+          "governmentCode": "10017010",
+          "name": "中正區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10017020",
+          "name": "七堵區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10017030",
+          "name": "暖暖區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10017040",
+          "name": "仁愛區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10017050",
+          "name": "中山區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10017060",
+          "name": "安樂區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10017070",
+          "name": "信義區",
+          "sortOrder": 7
+        }
+      ]
+    },
+    {
+      "governmentCode": "67000",
+      "name": "臺南市",
+      "sortOrder": 4,
+      "districts": [
+        {
+          "governmentCode": "67000010",
+          "name": "新營區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "67000020",
+          "name": "鹽水區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "67000030",
+          "name": "白河區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "67000040",
+          "name": "柳營區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "67000050",
+          "name": "後壁區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "67000060",
+          "name": "東山區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "67000070",
+          "name": "麻豆區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "67000080",
+          "name": "下營區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "67000090",
+          "name": "六甲區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "67000100",
+          "name": "官田區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "67000110",
+          "name": "大內區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "67000120",
+          "name": "佳里區",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "67000130",
+          "name": "學甲區",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "67000140",
+          "name": "西港區",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "67000150",
+          "name": "七股區",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "67000160",
+          "name": "將軍區",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "67000170",
+          "name": "北門區",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "67000180",
+          "name": "新化區",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "67000190",
+          "name": "善化區",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "67000200",
+          "name": "新市區",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "67000210",
+          "name": "安定區",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "67000220",
+          "name": "山上區",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "67000230",
+          "name": "玉井區",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "67000240",
+          "name": "楠西區",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "67000250",
+          "name": "南化區",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "67000260",
+          "name": "左鎮區",
+          "sortOrder": 26
+        },
+        {
+          "governmentCode": "67000270",
+          "name": "仁德區",
+          "sortOrder": 27
+        },
+        {
+          "governmentCode": "67000280",
+          "name": "歸仁區",
+          "sortOrder": 28
+        },
+        {
+          "governmentCode": "67000290",
+          "name": "關廟區",
+          "sortOrder": 29
+        },
+        {
+          "governmentCode": "67000300",
+          "name": "龍崎區",
+          "sortOrder": 30
+        },
+        {
+          "governmentCode": "67000310",
+          "name": "永康區",
+          "sortOrder": 31
+        },
+        {
+          "governmentCode": "67000320",
+          "name": "東區",
+          "sortOrder": 32
+        },
+        {
+          "governmentCode": "67000330",
+          "name": "南區",
+          "sortOrder": 33
+        },
+        {
+          "governmentCode": "67000340",
+          "name": "北區",
+          "sortOrder": 34
+        },
+        {
+          "governmentCode": "67000350",
+          "name": "安南區",
+          "sortOrder": 35
+        },
+        {
+          "governmentCode": "67000360",
+          "name": "安平區",
+          "sortOrder": 36
+        },
+        {
+          "governmentCode": "67000370",
+          "name": "中西區",
+          "sortOrder": 37
+        }
+      ]
+    },
+    {
+      "governmentCode": "64000",
+      "name": "高雄市",
+      "sortOrder": 5,
+      "districts": [
+        {
+          "governmentCode": "64000010",
+          "name": "鹽埕區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "64000020",
+          "name": "鼓山區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "64000030",
+          "name": "左營區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "64000040",
+          "name": "楠梓區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "64000050",
+          "name": "三民區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "64000060",
+          "name": "新興區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "64000070",
+          "name": "前金區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "64000080",
+          "name": "苓雅區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "64000090",
+          "name": "前鎮區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "64000100",
+          "name": "旗津區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "64000110",
+          "name": "小港區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "64000120",
+          "name": "鳳山區",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "64000130",
+          "name": "林園區",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "64000140",
+          "name": "大寮區",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "64000150",
+          "name": "大樹區",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "64000160",
+          "name": "大社區",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "64000170",
+          "name": "仁武區",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "64000180",
+          "name": "鳥松區",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "64000190",
+          "name": "岡山區",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "64000200",
+          "name": "橋頭區",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "64000210",
+          "name": "燕巢區",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "64000220",
+          "name": "田寮區",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "64000230",
+          "name": "阿蓮區",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "64000240",
+          "name": "路竹區",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "64000250",
+          "name": "湖內區",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "64000260",
+          "name": "茄萣區",
+          "sortOrder": 26
+        },
+        {
+          "governmentCode": "64000270",
+          "name": "永安區",
+          "sortOrder": 27
+        },
+        {
+          "governmentCode": "64000280",
+          "name": "彌陀區",
+          "sortOrder": 28
+        },
+        {
+          "governmentCode": "64000290",
+          "name": "梓官區",
+          "sortOrder": 29
+        },
+        {
+          "governmentCode": "64000300",
+          "name": "旗山區",
+          "sortOrder": 30
+        },
+        {
+          "governmentCode": "64000310",
+          "name": "美濃區",
+          "sortOrder": 31
+        },
+        {
+          "governmentCode": "64000320",
+          "name": "六龜區",
+          "sortOrder": 32
+        },
+        {
+          "governmentCode": "64000330",
+          "name": "甲仙區",
+          "sortOrder": 33
+        },
+        {
+          "governmentCode": "64000340",
+          "name": "杉林區",
+          "sortOrder": 34
+        },
+        {
+          "governmentCode": "64000350",
+          "name": "內門區",
+          "sortOrder": 35
+        },
+        {
+          "governmentCode": "64000360",
+          "name": "茂林區",
+          "sortOrder": 36
+        },
+        {
+          "governmentCode": "64000370",
+          "name": "桃源區",
+          "sortOrder": 37
+        },
+        {
+          "governmentCode": "64000380",
+          "name": "那瑪夏區",
+          "sortOrder": 38
+        }
+      ]
+    },
+    {
+      "governmentCode": "65000",
+      "name": "新北市",
+      "sortOrder": 6,
+      "districts": [
+        {
+          "governmentCode": "65000010",
+          "name": "板橋區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "65000020",
+          "name": "三重區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "65000030",
+          "name": "中和區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "65000040",
+          "name": "永和區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "65000050",
+          "name": "新莊區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "65000060",
+          "name": "新店區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "65000070",
+          "name": "樹林區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "65000080",
+          "name": "鶯歌區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "65000090",
+          "name": "三峽區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "65000100",
+          "name": "淡水區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "65000110",
+          "name": "汐止區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "65000120",
+          "name": "瑞芳區",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "65000130",
+          "name": "土城區",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "65000140",
+          "name": "蘆洲區",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "65000150",
+          "name": "五股區",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "65000160",
+          "name": "泰山區",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "65000170",
+          "name": "林口區",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "65000180",
+          "name": "深坑區",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "65000190",
+          "name": "石碇區",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "65000200",
+          "name": "坪林區",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "65000210",
+          "name": "三芝區",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "65000220",
+          "name": "石門區",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "65000230",
+          "name": "八里區",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "65000240",
+          "name": "平溪區",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "65000250",
+          "name": "雙溪區",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "65000260",
+          "name": "貢寮區",
+          "sortOrder": 26
+        },
+        {
+          "governmentCode": "65000270",
+          "name": "金山區",
+          "sortOrder": 27
+        },
+        {
+          "governmentCode": "65000280",
+          "name": "萬里區",
+          "sortOrder": 28
+        },
+        {
+          "governmentCode": "65000290",
+          "name": "烏來區",
+          "sortOrder": 29
+        }
+      ]
+    },
+    {
+      "governmentCode": "10002",
+      "name": "宜蘭縣",
+      "sortOrder": 7,
+      "districts": [
+        {
+          "governmentCode": "10002010",
+          "name": "宜蘭市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10002020",
+          "name": "羅東鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10002030",
+          "name": "蘇澳鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10002040",
+          "name": "頭城鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10002050",
+          "name": "礁溪鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10002060",
+          "name": "壯圍鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10002070",
+          "name": "員山鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10002080",
+          "name": "冬山鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10002090",
+          "name": "五結鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10002100",
+          "name": "三星鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10002110",
+          "name": "大同鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10002120",
+          "name": "南澳鄉",
+          "sortOrder": 12
+        }
+      ]
+    },
+    {
+      "governmentCode": "68000",
+      "name": "桃園市",
+      "sortOrder": 8,
+      "districts": [
+        {
+          "governmentCode": "68000010",
+          "name": "桃園區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "68000020",
+          "name": "中壢區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "68000030",
+          "name": "大溪區",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "68000040",
+          "name": "楊梅區",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "68000050",
+          "name": "蘆竹區",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "68000060",
+          "name": "大園區",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "68000070",
+          "name": "龜山區",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "68000080",
+          "name": "八德區",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "68000090",
+          "name": "龍潭區",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "68000100",
+          "name": "平鎮區",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "68000110",
+          "name": "新屋區",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "68000120",
+          "name": "觀音區",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "68000130",
+          "name": "復興區",
+          "sortOrder": 13
+        }
+      ]
+    },
+    {
+      "governmentCode": "10020",
+      "name": "嘉義市",
+      "sortOrder": 9,
+      "districts": [
+        {
+          "governmentCode": "10020010",
+          "name": "東區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10020020",
+          "name": "西區",
+          "sortOrder": 2
+        }
+      ]
+    },
+    {
+      "governmentCode": "10004",
+      "name": "新竹縣",
+      "sortOrder": 10,
+      "districts": [
+        {
+          "governmentCode": "10004010",
+          "name": "竹北市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10004020",
+          "name": "竹東鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10004030",
+          "name": "新埔鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10004040",
+          "name": "關西鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10004050",
+          "name": "湖口鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10004060",
+          "name": "新豐鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10004070",
+          "name": "芎林鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10004080",
+          "name": "橫山鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10004090",
+          "name": "北埔鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10004100",
+          "name": "寶山鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10004110",
+          "name": "峨眉鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10004120",
+          "name": "尖石鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10004130",
+          "name": "五峰鄉",
+          "sortOrder": 13
+        }
+      ]
+    },
+    {
+      "governmentCode": "10005",
+      "name": "苗栗縣",
+      "sortOrder": 11,
+      "districts": [
+        {
+          "governmentCode": "10005010",
+          "name": "苗栗市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10005020",
+          "name": "苑裡鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10005030",
+          "name": "通霄鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10005040",
+          "name": "竹南鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10005050",
+          "name": "頭份市",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10005060",
+          "name": "後龍鎮",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10005070",
+          "name": "卓蘭鎮",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10005080",
+          "name": "大湖鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10005090",
+          "name": "公館鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10005100",
+          "name": "銅鑼鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10005110",
+          "name": "南庄鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10005120",
+          "name": "頭屋鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10005130",
+          "name": "三義鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10005140",
+          "name": "西湖鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10005150",
+          "name": "造橋鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10005160",
+          "name": "三灣鄉",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "10005170",
+          "name": "獅潭鄉",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "10005180",
+          "name": "泰安鄉",
+          "sortOrder": 18
+        }
+      ]
+    },
+    {
+      "governmentCode": "10008",
+      "name": "南投縣",
+      "sortOrder": 12,
+      "districts": [
+        {
+          "governmentCode": "10008010",
+          "name": "南投市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10008020",
+          "name": "埔里鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10008030",
+          "name": "草屯鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10008040",
+          "name": "竹山鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10008050",
+          "name": "集集鎮",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10008060",
+          "name": "名間鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10008070",
+          "name": "鹿谷鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10008080",
+          "name": "中寮鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10008090",
+          "name": "魚池鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10008100",
+          "name": "國姓鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10008110",
+          "name": "水里鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10008120",
+          "name": "信義鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10008130",
+          "name": "仁愛鄉",
+          "sortOrder": 13
+        }
+      ]
+    },
+    {
+      "governmentCode": "10007",
+      "name": "彰化縣",
+      "sortOrder": 13,
+      "districts": [
+        {
+          "governmentCode": "10007010",
+          "name": "彰化市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10007020",
+          "name": "鹿港鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10007030",
+          "name": "和美鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10007040",
+          "name": "線西鄉",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10007050",
+          "name": "伸港鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10007060",
+          "name": "福興鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10007070",
+          "name": "秀水鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10007080",
+          "name": "花壇鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10007090",
+          "name": "芬園鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10007100",
+          "name": "員林市",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10007110",
+          "name": "溪湖鎮",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10007120",
+          "name": "田中鎮",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10007130",
+          "name": "大村鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10007140",
+          "name": "埔鹽鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10007150",
+          "name": "埔心鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10007160",
+          "name": "永靖鄉",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "10007170",
+          "name": "社頭鄉",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "10007180",
+          "name": "二水鄉",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "10007190",
+          "name": "北斗鎮",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "10007200",
+          "name": "二林鎮",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "10007210",
+          "name": "田尾鄉",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "10007220",
+          "name": "埤頭鄉",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "10007230",
+          "name": "芳苑鄉",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "10007240",
+          "name": "大城鄉",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "10007250",
+          "name": "竹塘鄉",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "10007260",
+          "name": "溪州鄉",
+          "sortOrder": 26
+        }
+      ]
+    },
+    {
+      "governmentCode": "10018",
+      "name": "新竹市",
+      "sortOrder": 14,
+      "districts": [
+        {
+          "governmentCode": "10018010",
+          "name": "東區",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10018020",
+          "name": "北區",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10018030",
+          "name": "香山區",
+          "sortOrder": 3
+        }
+      ]
+    },
+    {
+      "governmentCode": "10009",
+      "name": "雲林縣",
+      "sortOrder": 15,
+      "districts": [
+        {
+          "governmentCode": "10009010",
+          "name": "斗六市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10009020",
+          "name": "斗南鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10009030",
+          "name": "虎尾鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10009040",
+          "name": "西螺鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10009050",
+          "name": "土庫鎮",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10009060",
+          "name": "北港鎮",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10009070",
+          "name": "古坑鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10009080",
+          "name": "大埤鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10009090",
+          "name": "莿桐鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10009100",
+          "name": "林內鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10009110",
+          "name": "二崙鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10009120",
+          "name": "崙背鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10009130",
+          "name": "麥寮鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10009140",
+          "name": "東勢鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10009150",
+          "name": "褒忠鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10009160",
+          "name": "臺西鄉",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "10009170",
+          "name": "元長鄉",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "10009180",
+          "name": "四湖鄉",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "10009190",
+          "name": "口湖鄉",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "10009200",
+          "name": "水林鄉",
+          "sortOrder": 20
+        }
+      ]
+    },
+    {
+      "governmentCode": "10010",
+      "name": "嘉義縣",
+      "sortOrder": 16,
+      "districts": [
+        {
+          "governmentCode": "10010010",
+          "name": "太保市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10010020",
+          "name": "朴子市",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10010030",
+          "name": "布袋鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10010040",
+          "name": "大林鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10010050",
+          "name": "民雄鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10010060",
+          "name": "溪口鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10010070",
+          "name": "新港鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10010080",
+          "name": "六腳鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10010090",
+          "name": "東石鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10010100",
+          "name": "義竹鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10010110",
+          "name": "鹿草鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10010120",
+          "name": "水上鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10010130",
+          "name": "中埔鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10010140",
+          "name": "竹崎鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10010150",
+          "name": "梅山鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10010160",
+          "name": "番路鄉",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "10010170",
+          "name": "大埔鄉",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "10010180",
+          "name": "阿里山鄉",
+          "sortOrder": 18
+        }
+      ]
+    },
+    {
+      "governmentCode": "10013",
+      "name": "屏東縣",
+      "sortOrder": 17,
+      "districts": [
+        {
+          "governmentCode": "10013010",
+          "name": "屏東市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10013020",
+          "name": "潮州鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10013030",
+          "name": "東港鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10013040",
+          "name": "恆春鎮",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10013050",
+          "name": "萬丹鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10013060",
+          "name": "長治鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10013070",
+          "name": "麟洛鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10013080",
+          "name": "九如鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10013090",
+          "name": "里港鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10013100",
+          "name": "鹽埔鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10013110",
+          "name": "高樹鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10013120",
+          "name": "萬巒鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10013130",
+          "name": "內埔鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10013140",
+          "name": "竹田鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10013150",
+          "name": "新埤鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10013160",
+          "name": "枋寮鄉",
+          "sortOrder": 16
+        },
+        {
+          "governmentCode": "10013170",
+          "name": "新園鄉",
+          "sortOrder": 17
+        },
+        {
+          "governmentCode": "10013180",
+          "name": "崁頂鄉",
+          "sortOrder": 18
+        },
+        {
+          "governmentCode": "10013190",
+          "name": "林邊鄉",
+          "sortOrder": 19
+        },
+        {
+          "governmentCode": "10013200",
+          "name": "南州鄉",
+          "sortOrder": 20
+        },
+        {
+          "governmentCode": "10013210",
+          "name": "佳冬鄉",
+          "sortOrder": 21
+        },
+        {
+          "governmentCode": "10013220",
+          "name": "琉球鄉",
+          "sortOrder": 22
+        },
+        {
+          "governmentCode": "10013230",
+          "name": "車城鄉",
+          "sortOrder": 23
+        },
+        {
+          "governmentCode": "10013240",
+          "name": "滿州鄉",
+          "sortOrder": 24
+        },
+        {
+          "governmentCode": "10013250",
+          "name": "枋山鄉",
+          "sortOrder": 25
+        },
+        {
+          "governmentCode": "10013260",
+          "name": "三地門鄉",
+          "sortOrder": 26
+        },
+        {
+          "governmentCode": "10013270",
+          "name": "霧臺鄉",
+          "sortOrder": 27
+        },
+        {
+          "governmentCode": "10013280",
+          "name": "瑪家鄉",
+          "sortOrder": 28
+        },
+        {
+          "governmentCode": "10013290",
+          "name": "泰武鄉",
+          "sortOrder": 29
+        },
+        {
+          "governmentCode": "10013300",
+          "name": "來義鄉",
+          "sortOrder": 30
+        },
+        {
+          "governmentCode": "10013310",
+          "name": "春日鄉",
+          "sortOrder": 31
+        },
+        {
+          "governmentCode": "10013320",
+          "name": "獅子鄉",
+          "sortOrder": 32
+        },
+        {
+          "governmentCode": "10013330",
+          "name": "牡丹鄉",
+          "sortOrder": 33
+        }
+      ]
+    },
+    {
+      "governmentCode": "10015",
+      "name": "花蓮縣",
+      "sortOrder": 18,
+      "districts": [
+        {
+          "governmentCode": "10015010",
+          "name": "花蓮市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10015020",
+          "name": "鳳林鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10015030",
+          "name": "玉里鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10015040",
+          "name": "新城鄉",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10015050",
+          "name": "吉安鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10015060",
+          "name": "壽豐鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10015070",
+          "name": "光復鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10015080",
+          "name": "豐濱鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10015090",
+          "name": "瑞穗鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10015100",
+          "name": "富里鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10015110",
+          "name": "秀林鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10015120",
+          "name": "萬榮鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10015130",
+          "name": "卓溪鄉",
+          "sortOrder": 13
+        }
+      ]
+    },
+    {
+      "governmentCode": "10014",
+      "name": "臺東縣",
+      "sortOrder": 19,
+      "districts": [
+        {
+          "governmentCode": "10014010",
+          "name": "臺東市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10014020",
+          "name": "成功鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10014030",
+          "name": "關山鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10014040",
+          "name": "卑南鄉",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10014050",
+          "name": "鹿野鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10014060",
+          "name": "池上鄉",
+          "sortOrder": 6
+        },
+        {
+          "governmentCode": "10014070",
+          "name": "東河鄉",
+          "sortOrder": 7
+        },
+        {
+          "governmentCode": "10014080",
+          "name": "長濱鄉",
+          "sortOrder": 8
+        },
+        {
+          "governmentCode": "10014090",
+          "name": "太麻里鄉",
+          "sortOrder": 9
+        },
+        {
+          "governmentCode": "10014100",
+          "name": "大武鄉",
+          "sortOrder": 10
+        },
+        {
+          "governmentCode": "10014110",
+          "name": "綠島鄉",
+          "sortOrder": 11
+        },
+        {
+          "governmentCode": "10014120",
+          "name": "海端鄉",
+          "sortOrder": 12
+        },
+        {
+          "governmentCode": "10014130",
+          "name": "延平鄉",
+          "sortOrder": 13
+        },
+        {
+          "governmentCode": "10014140",
+          "name": "金峰鄉",
+          "sortOrder": 14
+        },
+        {
+          "governmentCode": "10014150",
+          "name": "達仁鄉",
+          "sortOrder": 15
+        },
+        {
+          "governmentCode": "10014160",
+          "name": "蘭嶼鄉",
+          "sortOrder": 16
+        }
+      ]
+    },
+    {
+      "governmentCode": "09020",
+      "name": "金門縣",
+      "sortOrder": 20,
+      "districts": [
+        {
+          "governmentCode": "09020010",
+          "name": "金城鎮",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "09020020",
+          "name": "金沙鎮",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "09020030",
+          "name": "金湖鎮",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "09020040",
+          "name": "金寧鄉",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "09020050",
+          "name": "烈嶼鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "09020060",
+          "name": "烏坵鄉",
+          "sortOrder": 6
+        }
+      ]
+    },
+    {
+      "governmentCode": "10016",
+      "name": "澎湖縣",
+      "sortOrder": 21,
+      "districts": [
+        {
+          "governmentCode": "10016010",
+          "name": "馬公市",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "10016020",
+          "name": "湖西鄉",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "10016030",
+          "name": "白沙鄉",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "10016040",
+          "name": "西嶼鄉",
+          "sortOrder": 4
+        },
+        {
+          "governmentCode": "10016050",
+          "name": "望安鄉",
+          "sortOrder": 5
+        },
+        {
+          "governmentCode": "10016060",
+          "name": "七美鄉",
+          "sortOrder": 6
+        }
+      ]
+    },
+    {
+      "governmentCode": "09007",
+      "name": "連江縣",
+      "sortOrder": 22,
+      "districts": [
+        {
+          "governmentCode": "09007010",
+          "name": "南竿鄉",
+          "sortOrder": 1
+        },
+        {
+          "governmentCode": "09007020",
+          "name": "北竿鄉",
+          "sortOrder": 2
+        },
+        {
+          "governmentCode": "09007030",
+          "name": "莒光鄉",
+          "sortOrder": 3
+        },
+        {
+          "governmentCode": "09007040",
+          "name": "東引鄉",
+          "sortOrder": 4
+        }
+      ]
+    }
+  ]
+}
