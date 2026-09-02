@@ -9,8 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 以下 builder.Services 是「DI 服務註冊」：先告訴 ASP.NET Core 可提供哪些物件，
+// Controller 或其他服務需要它們時，框架就能自動建立並注入。
+// 註冊 MVC Controller，以及 [ApiController] 的模型驗證等 Web API 功能。
 builder.Services.AddControllers();
+
+// 改寫 [ApiController] 的預設驗證失敗回應，讓 DTO 驗證錯誤也使用 ApiResponse 統一格式。
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -43,21 +47,36 @@ var connectionString = builder.Configuration
     ?? throw new InvalidOperationException(
         "Connection string 'DefaultConnection' was not found.");
 
+// 將 ApplicationDbContext 註冊為 Scoped：同一個 HTTP request 共用同一個 DbContext，
+// request 結束後由框架釋放；UseNpgsql 指定它要連線至 PostgreSQL。
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+// 註冊授權服務，供 [Authorize] 與 UseAuthorization 判斷目前使用者是否有權限。
 builder.Services.AddAuthorization();
 
+// 註冊 ASP.NET Core Identity 所需的帳號、密碼驗證與登入服務，
+// 例如 AuthController 注入的 UserManager 與 SignInManager。
+// AddEntityFrameworkStores 表示 Identity 帳號資料由 ApplicationDbContext 存取。
 builder.Services
     .AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// AddScoped 表示每個 HTTP request 各建立一份實例；
+// 當程式要求介面時，DI 會提供右側的實作類別。
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+
+// 位置資料匯入器也需要 DbContext，因此跟著 request／手動建立的 scope 共用同一生命週期。
 builder.Services.AddScoped<LocationReferenceImporter>();
+
+// 註冊全域例外處理器。真正將它放入 HTTP 管線的是下方的 UseExceptionHandler。
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+// 提供 ASP.NET Core 標準錯誤資訊所需的服務，並支援例外處理機制。
 builder.Services.AddProblemDetails();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// 產生 OpenAPI 文件，並註冊 Swagger UI 所需的文件產生服務。
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
@@ -80,18 +99,24 @@ if (args.Length == 2 && args[0] == "import-locations")
     return;
 }
 
-// Configure the HTTP request pipeline.
+// 以下 app.Use...／app.Map... 是「HTTP middleware 管線」：
+// request 會依照這裡的順序通過每一層處理。
 if (app.Environment.IsDevelopment())
 {
+    // 只在 Development 提供 OpenAPI JSON 與 Swagger 測試介面。
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// 將 HTTP request 重新導向 HTTPS。
 app.UseHttpsRedirection();
 
+// 捕捉後續 middleware／Controller 未處理的例外，交由 GlobalExceptionHandler 統一回傳 500。
 app.UseExceptionHandler();
 
+// 當後續處理只設定 401、403、404 等狀態碼、但沒有 Response Body 時，
+// 補上統一的 ApiResponse 錯誤內容。
 app.UseStatusCodePages(async statusCodeContext =>
 {
     var httpContext = statusCodeContext.HttpContext;
@@ -114,12 +139,13 @@ app.UseStatusCodePages(async statusCodeContext =>
     await httpContext.Response.WriteAsJsonAsync(response);
 });
 
-// Add authentication and authorization middleware
-//確認「這個請求是誰」
+// 先讀取登入 Cookie 等憑證，確認「這個 request 是誰」，並建立 HttpContext.User。
 app.UseAuthentication();
-//確認「這個請求有沒有權限」
+
+// 再根據 [Authorize] 等規則，確認「這個使用者有沒有權限」。順序不可和 Authentication 對調。
 app.UseAuthorization();
 
+// 將標有 [Route]／[HttpPost] 等 Attribute 的 Controller endpoints 加入路由。
 app.MapControllers();
 
 app.Run();

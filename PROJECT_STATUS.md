@@ -1,6 +1,6 @@
 # 揪哪天？（Gathering Match）— 專案進度交接
 
-最後更新：2026-08-31
+最後更新：2026-09-02
 
 ## 專案位置
 
@@ -93,7 +93,9 @@
 - 已建立 `ApplicationDbContext : IdentityUserContext<ApplicationUser, long>`；第一階段不加入 Roles／UserRoles。
 - 已使用 Fluent API 將 `DisplayName` 設為必填且最多 50 字。
 - `Program.cs` 已註冊 Npgsql、`ApplicationDbContext`、Identity、Authentication 與 Authorization。
-- 尚未加入 `MapIdentityApi<ApplicationUser>()`，因此還沒有開放註冊／登入 endpoints。
+- 已建立自訂 `POST /api/auth/register` 與 `POST /api/auth/login`，註冊契約包含 `Email`、`Password`、`DisplayName`。
+- 註冊由 `UserManager<ApplicationUser>` 套用 Identity 密碼規則與密碼雜湊；登入由 `SignInManager<ApplicationUser>` 建立同站 Identity Cookie，Swagger 登入後可沿用該身分。
+- Auth API 沿用 `ApiResponse<T>` 統一成功與錯誤外層；登入失敗不揭露帳號是否存在。
 - 已決定 C# 與 PostgreSQL 資料表／欄位統一使用 PascalCase，不加入 `EFCore.NamingConventions`。
 - 已建立並套用 `InitialIdentity` Migration；資料庫包含 `AspNetUsers`、`AspNetUserClaims`、`AspNetUserLogins`、`AspNetUserTokens`。
 - 已建立活動規劃資料模型：`ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption`。
@@ -117,7 +119,9 @@
 - `SeedActivityTypes` 已套用到 Supabase PostgreSQL；執行日誌確認插入六筆資料、調整 identity sequence，並寫入 `__EFMigrationsHistory`。
 - 已建立台灣位置參照資料工具與完整 JSON 快照：22 個縣市、368 個行政區；應用程式 validator 已確認代碼格式、唯一性與隸屬關係。
 - `LocationReferenceImporter` 已將 22 個縣市與 368 個行政區匯入 Supabase；第二次執行新增、更新、停用皆為 0，已確認可重複執行且不會重複插入。
-- Identity API 仍未對外映射；自訂註冊／登入契約尚未完成，因此目前尚不能由一般使用者取得新增活動所需的登入身分。
+- Auth endpoints 已出現在 OpenAPI；無效登入已實測回傳統一的 `401 invalid_credentials`，且後端建置為 0 個警告、0 個錯誤。
+- 已使用 Supabase 真實資料庫完成註冊、Cookie 登入與新增活動成功路徑驗證：Activity ID `1` 與其 2 筆候選日期、2 筆候選地點由 EF Core aggregate 一次寫入，建立成功時有回傳分享 Token。
+- 真實寫入測試發現 Npgsql 的 `timestamptz` 只接受 UTC `DateTimeOffset`；`ActivityService` 現在會在保存前以 `ToUniversalTime()` 正規化 Deadline，保留原本時間點。
 
 ## 重要檔案
 
@@ -125,6 +129,8 @@
 - `asp-gather-match/asp-gather-match/asp-gather-match/Models/ApplicationUser.cs`：ASP.NET Core Identity 使用者 Entity。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Data/ApplicationDbContext.cs`：Identity／EF Core DbContext 與 Fluent API。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Program.cs`：Npgsql、Identity、Authentication 與 Authorization 服務註冊。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Contracts/Auth/`：主揪註冊、登入與登入使用者 Response DTO。
+- `asp-gather-match/asp-gather-match/asp-gather-match/Controllers/AuthController.cs`：主揪註冊與 Cookie 登入 endpoints。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Contracts/Activities/`：新增活動 Request／Response DTO。
 - `asp-gather-match/asp-gather-match/asp-gather-match/Contracts/Common/`：泛型 API Response 與統一錯誤格式。
 - `asp-gather-match/asp-gather-match/asp-gather-match/ErrorHandling/GlobalExceptionHandler.cs`：未預期 Exception 的全域處理。
@@ -156,8 +162,8 @@
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
 - 已建立新增活動 API；尚未建立活動查詢／修改 API、投票 Entity 或 Deadline 背景排程。
-- `ActivityType` Seed 與 City、District 參照資料皆已套用；新增活動的成功寫入流程仍待主揪註冊／登入 API 完成後，以真實登入身分驗證。
-- Identity API 尚未映射，登入與註冊契約仍需另外設計；目前只能確認新增活動 endpoint 會拒絕未登入請求。
+- `ActivityType` Seed 與 City、District 參照資料皆已套用；真實註冊、Cookie 登入與新增活動 aggregate 已使用一次性測試資料驗證成功。
+- 目前 Auth API 使用同站 Identity Cookie，適合 Swagger 與同站開發驗證；Nuxt 分站部署前仍需確認 CORS、Cookie `SameSite`／`Secure` 與 CSRF 防護策略。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
 - 活動、朋友與投票內容都尚未寫入資料庫。
@@ -169,14 +175,13 @@
 
 ## 建議下一步
 
-Identity Schema、第一批活動規劃 Entity、RLS 與新增活動 API 垂直流程已完成。下一步：
+Identity Schema、主揪註冊／登入 API、第一批活動規劃 Entity、RLS 與新增活動 API 垂直流程已完成，且成功寫入路徑已驗證。下一步：
 
-1. 設計包含 `DisplayName` 的主揪註冊／登入契約，再映射可實際使用的 Identity endpoints。
-2. 使用真實登入身分與參照資料，驗證新增活動、候選日期與候選地點的完整資料庫寫入。
-3. 驗證完成後再加入活動查詢與修改功能。
-4. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
+1. 補上登出 endpoint，讓主揪可明確結束 Cookie Session。
+2. 加入僅限主揪本人存取的活動查詢功能，先完成單筆查詢再考慮列表與修改。
+3. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
 
-建議下一個小步驟：設計並實作包含 `DisplayName` 的主揪註冊／登入 API，讓 Swagger 可以取得登入身分並測試新增活動。
+建議下一個小步驟：補上 `POST /api/auth/logout`，並驗證登出後同一個 Cookie Session 無法再呼叫受保護的新增活動 endpoint。
 
 ### 部署前可觀測性待辦
 

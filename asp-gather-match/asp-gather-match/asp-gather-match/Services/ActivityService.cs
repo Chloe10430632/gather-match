@@ -89,7 +89,8 @@ public class ActivityService(IActivityRepository activityRepository) : IActivity
             BudgetMax = request.BudgetMax,
             CityId = request.CityId,
             DistrictId = request.DistrictId,
-            DeadlineAt = request.DeadlineAt,
+            // PostgreSQL timestamptz 由 Npgsql 以 UTC 寫入；保留相同時間點並將 offset 正規化為 +00:00。
+            DeadlineAt = request.DeadlineAt.ToUniversalTime(),
             Status = "open",
             ShareTokenHash = Convert.ToHexString(
                 SHA256.HashData(Encoding.UTF8.GetBytes(shareToken))),

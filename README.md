@@ -21,6 +21,8 @@
 - 已建立 `ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption` 資料模型及關聯。
 - Identity 與目前業務表均已啟用 RLS，不開放前端透過 Supabase Data API 直接存取。
 - 已完成受 Identity 保護的「新增活動」API 第一條垂直流程。
+- 已完成包含 `DisplayName` 的主揪註冊 API 與同站 Cookie 登入 API；OpenAPI 路徑及無效登入的統一 `401` 回應已驗證。
+- 已以真實 Supabase 資料庫驗證註冊、Cookie 登入與新增活動 aggregate，成功一次寫入 Activity、2 筆候選日期及 2 筆候選地點。
 - 六筆活動類型的 `SeedActivityTypes` Migration 已套用至 Supabase。
 - 已確認台灣縣市／行政區官方代碼來源與匯入策略，詳見 `LOCATION_REFERENCE_DATA.md`。
 - 已將完整 JSON 快照中的 22 個縣市與 368 個行政區透過 Transaction 匯入器寫入 Supabase，並以第二次執行確認不會重複新增。
@@ -278,7 +280,7 @@ Group Match Score
 - [x] 建立 ASP.NET Core Identity 與 EF Core Migration 基礎
 - [x] 將 Identity、活動規劃 Schema 與 RLS 套用至 Supabase PostgreSQL
 - [x] 套用並驗證 `SeedActivityTypes` 活動類型參照資料
-- [ ] 實作活動、投票與結算流程（新增活動 API 第一版已完成）
+- [ ] 實作活動、投票與結算流程（主揪註冊／登入與新增活動 API 第一版已完成）
 - [x] 建立 Nuxt 3 + TypeScript + Tailwind CSS 前端骨架
 - [ ] 導入背景排程及整合測試
 - [ ] 建立前後端 Docker 化與可重現的 Container 開發環境
