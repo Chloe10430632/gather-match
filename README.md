@@ -41,6 +41,8 @@
 `GET /api/activities/{id}` 需要登入且只回傳主揪自己的活動，包含候選日期／地點，依 `SortOrder`、ID 排序。
 成功回傳 `200`；未登入回傳 `401`；不存在與非本人活動一律回傳 `404`。查詢不回傳分享碼或雜湊。
 
+完整重跑指令、真實 API 驗證結果及保留的測試資料請見 [BACKEND_VERIFICATION.md](./BACKEND_VERIFICATION.md)。
+
 <a id="vision"></a>
 
 ## ⚡ Product Vision

@@ -82,6 +82,7 @@
 - 已加入 `POST /api/auth/logout`，透過 `SignInManager.SignOutAsync` 清除 Cookie，可重複呼叫。
 - 已加入 `GatherMatch.Tests`（xUnit／Moq），涵蓋登入、登出與既有活動建立規則；單元測試不存取外部資料庫。
 - 已加入 `GET /api/activities/{id}`：Repository 同時篩選活動 ID 與登入主揪 ID，包含排序後的候選日期／地點；其他主揪或不存在均回傳 `404 not_found`，DTO 不包含分享碼或雜湊。
+- 2026-09-10：26 個單元測試通過；本機 API 連接開發 Supabase 的註冊、登入、建立、單筆查詢、登出通過 65 項檢查，包含跨主揪隔離與登出後 `401`。詳細紀錄與測試資料見 `BACKEND_VERIFICATION.md`。
 
 - 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
 - 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
@@ -170,7 +171,7 @@
 - 目前 Auth API 使用同站 Identity Cookie，適合 Swagger 與同站開發驗證；Nuxt 分站部署前仍需確認 CORS、Cookie `SameSite`／`Secure` 與 CSRF 防護策略。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
-- 活動、朋友與投票內容都尚未寫入資料庫。
+- Nuxt Demo 的活動、朋友與投票內容尚未串接後端；後端活動建立已實際寫入資料庫。
 - `localStorage` 目前同時保存示意 Token 與投票內容，只供前端流程驗證；正式版瀏覽器只應保存參加者識別碼，投票內容由後端保存與驗證。
 - 正式版需要兩種識別：網址中的活動 `shareToken`，以及朋友瀏覽器保存的 `participantToken`。資料庫只保存 `participantToken` 的安全雜湊值。
 - 清除瀏覽器資料、使用無痕模式或更換裝置時，免登入參加者可能無法自動找回原身分；這是 V0.1 可接受但需清楚說明的限制。
@@ -179,13 +180,11 @@
 
 ## 建議下一步
 
-Identity Schema、主揪註冊／登入 API、第一批活動規劃 Entity、RLS 與新增活動 API 垂直流程已完成，且成功寫入路徑已驗證。下一步：
+主揪登入／登出、活動建立與本人單筆查詢已通過單元測試及真實 Cookie HTTP 驗證。
 
-1. 登出 endpoint 與登入／活動建立單元測試已完成；完整 Cookie HTTP 流程將在本次驗收確認。
-2. 加入僅限主揪本人存取的活動查詢功能，先完成單筆查詢再考慮列表與修改。
-3. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
+本次目標尚缺活動修改 API。資料模型草案未決定建立後可修改哪些欄位，目前等待使用者確認範圍：先修改基本資料並保留候選項目，或也允許修改候選日期／地點。確認後繼續實作、測試、驗證與推送。
 
-建議下一個小步驟：補上 `POST /api/auth/logout`，並驗證登出後同一個 Cookie Session 無法再呼叫受保護的新增活動 endpoint。
+投票、結算與排程均不屬於本次工作範圍。
 
 ### 部署前可觀測性待辦
 
@@ -228,5 +227,5 @@ npm run preview
 
 前端 Step 1～3 與主揪回覆管理 Demo 已完成。後端已建立 ASP.NET Core Identity，以及 ActivityType、City、District、Activity、DateOption、PlaceOption；InitialIdentity、AddActivityPlanning、EnableRowLevelSecurity 三個 Migration 都已套用至 Supabase PostgreSQL。
 
-請先檢查實際程式碼與 Git 狀態，再設計並實作包含 DisplayName 的主揪註冊／登入 API，讓 Swagger 可以取得登入身分並測試既有的新增活動垂直流程。解釋每一層的責任，但由 Codex 處理重複程式碼。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
+主揪註冊／登入／登出、活動建立與本人單筆查詢已完成。請檢查實際程式碼、Git 狀態與 BACKEND_VERIFICATION.md，依使用者確認的範圍接續活動修改 API 與測試。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
 ```
