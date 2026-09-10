@@ -31,6 +31,13 @@
 
 詳細交接請見 [`PROJECT_STATUS.md`](./PROJECT_STATUS.md)。
 
+### 後端測試
+
+在專案根目錄執行 `dotnet test asp-gather-match/asp-gather-match/asp-gather-match.slnx`。
+`GatherMatch.Tests` 使用 xUnit 與 Moq；單元測試不連線資料庫，不需要 User Secrets。
+已涵蓋登入成功／失敗、可重複呼叫的 `POST /api/auth/logout`，以及活動建立驗證、主揪身分、UTC 與分享碼雜湊。
+登出回傳 `200` 與統一 `ApiResponse`，透過 Identity 清除目前瀏覽器的 Cookie。
+
 <a id="vision"></a>
 
 ## ⚡ Product Vision

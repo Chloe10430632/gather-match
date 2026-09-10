@@ -1,6 +1,6 @@
 # 揪哪天？（Gathering Match）— 專案進度交接
 
-最後更新：2026-09-02
+最後更新：2026-09-10
 
 ## 專案位置
 
@@ -78,6 +78,9 @@
 - Supabase Free 目前足以支援開發與小規模 Demo；需要不中斷服務、自動備份或超過免費額度時才評估升級。
 
 ### 已完成的後端基礎
+
+- 已加入 `POST /api/auth/logout`，透過 `SignInManager.SignOutAsync` 清除 Cookie，可重複呼叫。
+- 已加入 `GatherMatch.Tests`（xUnit／Moq），涵蓋登入、登出與既有活動建立規則；單元測試不存取外部資料庫。
 
 - 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
 - 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
@@ -177,7 +180,7 @@
 
 Identity Schema、主揪註冊／登入 API、第一批活動規劃 Entity、RLS 與新增活動 API 垂直流程已完成，且成功寫入路徑已驗證。下一步：
 
-1. 補上登出 endpoint，讓主揪可明確結束 Cookie Session。
+1. 登出 endpoint 與登入／活動建立單元測試已完成；完整 Cookie HTTP 流程將在本次驗收確認。
 2. 加入僅限主揪本人存取的活動查詢功能，先完成單筆查詢再考慮列表與修改。
 3. 之後再建立 `Participant`、`DateVote`、`PlaceVote` 與 `FormationResult`，不提前加入 Deadline 背景排程或 Google Places API。
 

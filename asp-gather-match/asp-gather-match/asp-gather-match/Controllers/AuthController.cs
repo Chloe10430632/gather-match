@@ -87,6 +87,15 @@ public class AuthController(
             HttpContext.TraceIdentifier));
     }
 
+    [HttpPost("logout")]
+    [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<object>>> Logout()
+    {
+        // 可重複呼叫，讓已過期或已登出的瀏覽器也能清除 Cookie。
+        await signInManager.SignOutAsync();
+        return Ok(ApiResponse<object>.Ok(new { }, HttpContext.TraceIdentifier));
+    }
+
     private BadRequestObjectResult ValidationError(
         Dictionary<string, string[]> errors) =>
         BadRequest(ApiResponse<object>.Fail(
