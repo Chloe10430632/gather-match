@@ -38,6 +38,9 @@
 已涵蓋登入成功／失敗、可重複呼叫的 `POST /api/auth/logout`，以及活動建立驗證、主揪身分、UTC 與分享碼雜湊。
 登出回傳 `200` 與統一 `ApiResponse`，透過 Identity 清除目前瀏覽器的 Cookie。
 
+`GET /api/activities/{id}` 需要登入且只回傳主揪自己的活動，包含候選日期／地點，依 `SortOrder`、ID 排序。
+成功回傳 `200`；未登入回傳 `401`；不存在與非本人活動一律回傳 `404`。查詢不回傳分享碼或雜湊。
+
 <a id="vision"></a>
 
 ## ⚡ Product Vision

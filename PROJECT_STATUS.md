@@ -81,6 +81,7 @@
 
 - 已加入 `POST /api/auth/logout`，透過 `SignInManager.SignOutAsync` 清除 Cookie，可重複呼叫。
 - 已加入 `GatherMatch.Tests`（xUnit／Moq），涵蓋登入、登出與既有活動建立規則；單元測試不存取外部資料庫。
+- 已加入 `GET /api/activities/{id}`：Repository 同時篩選活動 ID 與登入主揪 ID，包含排序後的候選日期／地點；其他主揪或不存在均回傳 `404 not_found`，DTO 不包含分享碼或雜湊。
 
 - 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
 - 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
@@ -164,7 +165,7 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 已建立新增活動 API；尚未建立活動查詢／修改 API、投票 Entity 或 Deadline 背景排程。
+- 已建立新增活動與主揪單筆查詢 API；尚未建立修改 API、投票 Entity 或 Deadline 背景排程。
 - `ActivityType` Seed 與 City、District 參照資料皆已套用；真實註冊、Cookie 登入與新增活動 aggregate 已使用一次性測試資料驗證成功。
 - 目前 Auth API 使用同站 Identity Cookie，適合 Swagger 與同站開發驗證；Nuxt 分站部署前仍需確認 CORS、Cookie `SameSite`／`Secure` 與 CSRF 防護策略。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。

@@ -9,6 +9,22 @@ namespace asp_gather_match.Services;
 
 public class ActivityService(IActivityRepository activityRepository) : IActivityService
 {
+    public async Task<ActivityResponse?> GetAsync(long hostUserId, long activityId)
+    {
+        var activity = await activityRepository.GetOwnedAsync(activityId, hostUserId);
+        return activity is null ? null : ToResponse(activity);
+    }
+
+    private static ActivityResponse ToResponse(ActivityEntity activity) => new(
+        activity.Id, activity.Title, activity.ActivityTypeId,
+        activity.BudgetMin, activity.BudgetMax, activity.CurrencyCode,
+        activity.CityId, activity.DistrictId, activity.DeadlineAt, activity.Status,
+        activity.CreatedAt, activity.UpdatedAt,
+        activity.DateOptions.OrderBy(option => option.SortOrder).ThenBy(option => option.Id)
+            .Select(option => new DateOptionResponse(option.Id, option.OptionDate, option.StartTime, option.EndTime, option.SortOrder)).ToList(),
+        activity.PlaceOptions.OrderBy(option => option.SortOrder).ThenBy(option => option.Id)
+            .Select(option => new PlaceOptionResponse(option.Id, option.SourceType, option.DisplayLabel, option.CustomAddress, option.SortOrder)).ToList());
+
     public async Task<ActivityCreationResult> CreateAsync(
         long hostUserId,
         CreateActivityRequest request)

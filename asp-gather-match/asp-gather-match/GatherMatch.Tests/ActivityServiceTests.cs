@@ -31,6 +31,34 @@ public class ActivityServiceTests
     };
 
     [Fact]
+    public async Task Get_UsesOwnerAndReturnsOrderedOptionsWithoutSecrets()
+    {
+        repository.Setup(x => x.GetOwnedAsync(42, 7)).ReturnsAsync(new Activity
+        {
+            Id = 42, HostUserId = 7, Title = "Test activity",
+            ShareTokenHash = Guid.NewGuid().ToString(),
+            DateOptions = [new() { Id = 2, SortOrder = 1 }, new() { Id = 1, SortOrder = 0 }],
+            PlaceOptions = [new() { Id = 4, SortOrder = 1 }, new() { Id = 3, SortOrder = 0 }]
+        });
+
+        var result = await service.GetAsync(7, 42);
+
+        Assert.NotNull(result);
+        Assert.Equal(42, result.Id);
+        Assert.Equal(new long[] { 1, 2 }, result.DateOptions.Select(x => x.Id));
+        Assert.Equal(new long[] { 3, 4 }, result.PlaceOptions.Select(x => x.Id));
+        Assert.DoesNotContain("token", System.Text.Json.JsonSerializer.Serialize(result), StringComparison.OrdinalIgnoreCase);
+        repository.Verify(x => x.GetOwnedAsync(42, 7), Times.Once);
+    }
+
+    [Fact]
+    public async Task Get_NotOwnedOrMissing_ReturnsNull()
+    {
+        repository.Setup(x => x.GetOwnedAsync(42, 8)).ReturnsAsync((Activity?)null);
+        Assert.Null(await service.GetAsync(8, 42));
+    }
+
+    [Fact]
     public async Task Create_PersistsOwnerUtcAndHashOnly()
     {
         Activity? saved = null;

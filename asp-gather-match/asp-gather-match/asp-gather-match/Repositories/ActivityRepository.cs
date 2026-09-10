@@ -6,6 +6,12 @@ namespace asp_gather_match.Repositories;
 
 public class ActivityRepository(ApplicationDbContext dbContext) : IActivityRepository
 {
+    public Task<ActivityEntity?> GetOwnedAsync(long activityId, long hostUserId) =>
+        dbContext.Activities
+            .Include(activity => activity.DateOptions)
+            .Include(activity => activity.PlaceOptions)
+            .SingleOrDefaultAsync(activity => activity.Id == activityId && activity.HostUserId == hostUserId);
+
     public Task<bool> ActiveActivityTypeExistsAsync(short activityTypeId) =>
         dbContext.ActivityTypes.AnyAsync(type => type.Id == activityTypeId && type.IsActive);
 
