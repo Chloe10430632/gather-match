@@ -1,7 +1,7 @@
 #requires -Version 7.5
 <#
 Run against the local API connected to the DEVELOPMENT database only.
-Creates two labelled test accounts and one activity; never deletes data.
+Creates two labelled test accounts and two activities; never deletes data.
 Credentials, cookies and the share token stay in memory and are never printed.
 #>
 param(
@@ -72,7 +72,7 @@ try {
         budgetMin = 100; budgetMax = 500; deadlineAt = $deadline
         dateOptions = @(
             @{ optionDate = [DateTime]::UtcNow.AddDays(3).ToString('yyyy-MM-dd'); startTime = '18:00:00'; endTime = '20:00:00' }
-            @{ optionDate = [DateTime]::UtcNow.AddDays(4).ToString('yyyy-MM-dd') }
+            @{ optionDate = [DateTime]::UtcNow.AddDays(4).ToString('yyyy-MM-dd'); startTime = '18:00:00'; endTime = '20:00:00' }
         )
         placeOptions = @(
             @{ displayLabel = "TEST place A $runId"; customAddress = 'Test address A' }
@@ -97,9 +97,82 @@ try {
     $null = Invoke-Check GET "/api/activities/$activityId" $otherSession $null 404 'not_found'
     $null = Invoke-Check GET '/api/activities/9223372036854775807' $ownerSession $null 404 'not_found'
 
+    $path = "/api/activities/$activityId"
+    $before = $read.Json.data
+    $fixedFields = @('id', 'activityTypeId', 'budgetMin', 'budgetMax', 'currencyCode', 'cityId', 'districtId', 'deadlineAt', 'status', 'createdAt', 'placeOptions')
+    $fixedBefore = $before | Select-Object -Property $fixedFields | ConvertTo-Json -Depth 10 -Compress
+    $firstDateId = $before.dateOptions[0].id
+    $update = @{
+        title = "TEST updated $runId"
+        dateOptions = @(@{ id = $firstDateId; optionDate = [DateTime]::UtcNow.AddDays(5).ToString('yyyy-MM-dd'); startTime = '18:00:00'; endTime = '20:00:00' })
+    }
+    $null = Invoke-Check PATCH $path $anonymous $update 401 'unauthorized'
+    $null = Invoke-Check PATCH $path $otherSession $update 404 'not_found'
+    $null = Invoke-Check PATCH '/api/activities/9223372036854775807' $ownerSession $update 404 'not_found'
+    foreach ($field in @('deadlineAt', 'activityTypeId', 'placeOptions', 'budgetMin', 'budgetMax', 'cityId', 'districtId', 'hostUserId', 'status')) {
+        $invalid = @{ title = 'Should not persist'; $field = 1 }
+        $null = Invoke-Check PATCH $path $ownerSession $invalid 400 'validation_failed'
+    }
+    $null = Invoke-Check PATCH $path $ownerSession @{} 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ title = ' ' } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ title = ('x' * 101) } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ dateOptions = @() } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ dateOptions = @($null) } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ dateOptions = @(@{ id = $firstDateId }) } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ dateOptions = @(@{ id = [long]::MaxValue; optionDate = $update.dateOptions[0].optionDate }) } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{ dateOptions = @($update.dateOptions[0], $update.dateOptions[0]) } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{
+        title = 'Should not persist'
+        dateOptions = @(@{ id = $firstDateId; optionDate = $before.dateOptions[1].optionDate; startTime = '18:00:00' })
+    } 400 'validation_failed'
+    $null = Invoke-Check PATCH $path $ownerSession @{
+        title = 'Should not persist'
+        dateOptions = @(@{ id = $firstDateId; optionDate = $update.dateOptions[0].optionDate; startTime = '20:00:00'; endTime = '19:00:00' })
+    } 400 'validation_failed'
+    $unchanged = Invoke-Check GET $path $ownerSession $null 200
+    Assert-True (($unchanged.Json.data | ConvertTo-Json -Depth 10 -Compress) -eq ($before | ConvertTo-Json -Depth 10 -Compress)) 'Rejected updates leave activity unchanged'
+
+    $patched = Invoke-Check PATCH $path $ownerSession $update 200
+    Assert-True ($patched.Json.data.title -eq $update.title) 'PATCH returns new title'
+    $updated = (Invoke-Check GET $path $ownerSession $null 200).Json.data
+    Assert-True ($updated.title -eq $update.title) 'Updated title persisted'
+    Assert-True ($updated.dateOptions[0].optionDate -eq $update.dateOptions[0].optionDate) 'Updated date persisted'
+    Assert-True ($updated.dateOptions[0].id -eq $firstDateId -and $updated.dateOptions.Count -eq 2) 'Date identities and count preserved'
+    Assert-True (($updated.dateOptions[1] | ConvertTo-Json -Compress) -eq ($before.dateOptions[1] | ConvertTo-Json -Compress)) 'Unmentioned date preserved'
+    Assert-True (($updated | Select-Object -Property $fixedFields | ConvertTo-Json -Depth 10 -Compress) -eq $fixedBefore) 'All immutable fields preserved'
+    Assert-True ([DateTimeOffset]$updated.updatedAt -gt [DateTimeOffset]$before.updatedAt) 'UpdatedAt advanced'
+    Assert-True (($updated | ConvertTo-Json -Depth 10) -notmatch '(?i)token|hash') 'Update excludes secrets'
+
+    # Both dates use the same start time, exercising the real PostgreSQL unique index during a swap.
+    $swap = @{ dateOptions = @(
+        @{ id = $updated.dateOptions[0].id; optionDate = $updated.dateOptions[1].optionDate; startTime = '18:00:00'; endTime = '20:00:00' }
+        @{ id = $updated.dateOptions[1].id; optionDate = $updated.dateOptions[0].optionDate; startTime = '18:00:00'; endTime = '20:00:00' }
+    ) }
+    $null = Invoke-Check PATCH $path $ownerSession $swap 200
+    $swapped = (Invoke-Check GET $path $ownerSession $null 200).Json.data
+    Assert-True ($swapped.dateOptions[0].optionDate -eq $swap.dateOptions[0].optionDate -and $swapped.dateOptions[1].optionDate -eq $swap.dateOptions[1].optionDate) 'Date swap persisted atomically'
+    Assert-True (($swapped | Select-Object -Property $fixedFields | ConvertTo-Json -Depth 10 -Compress) -eq $fixedBefore) 'Date swap preserves immutable fields'
+    $null = Invoke-Check PATCH $path $ownerSession @{ title = "TEST final $runId" } 200
+
+    # Use a separate short-lived TEST activity; never change an existing deadline to force expiry.
+    $expiringRequest = $request.Clone()
+    $expiringRequest.title = "TEST expiry $runId"
+    $expiry = [DateTimeOffset]::UtcNow.AddSeconds(8)
+    $expiringRequest.deadlineAt = $expiry.ToString('o')
+    $expiring = Invoke-Check POST '/api/activities' $ownerSession $expiringRequest 201
+    $expiryId = $expiring.Json.data.id
+    $expiring = $null
+    Write-Output "Created expiry test activity: id=$expiryId, label=TEST expiry $runId (2 date options, 2 place options)"
+    $remainingMs = [Math]::Max(0, ($expiry - [DateTimeOffset]::UtcNow).TotalMilliseconds + 100)
+    Start-Sleep -Milliseconds ([int]$remainingMs)
+    $null = Invoke-Check PATCH "/api/activities/$expiryId" $ownerSession @{ title = 'Should not persist' } 409 'activity_not_editable'
+    $expiredRead = Invoke-Check GET "/api/activities/$expiryId" $ownerSession $null 200
+    Assert-True ($expiredRead.Json.data.title -eq $expiringRequest.title) 'Expired activity unchanged'
+
     $null = Invoke-Check POST '/api/auth/logout' $ownerSession $null 200
     $null = Invoke-Check GET "/api/activities/$activityId" $ownerSession $null 401 'unauthorized'
     $null = Invoke-Check POST '/api/activities' $ownerSession $request 401 'unauthorized'
+    $null = Invoke-Check PATCH $path $ownerSession $update 401 'unauthorized'
     $null = Invoke-Check POST '/api/auth/logout' $ownerSession $null 200
     Write-Output "PASS: $checks checks. RunId=$runId. Test records retained; no deletion or schema changes."
 }

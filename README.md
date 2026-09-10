@@ -20,8 +20,8 @@
 - Supabase PostgreSQL 已套用 `InitialIdentity`、`AddActivityPlanning`、`EnableRowLevelSecurity` 三個 Migration。
 - 已建立 `ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption` 資料模型及關聯。
 - Identity 與目前業務表均已啟用 RLS，不開放前端透過 Supabase Data API 直接存取。
-- 已完成受 Identity 保護的「新增活動」API 第一條垂直流程。
-- 已完成包含 `DisplayName` 的主揪註冊 API 與同站 Cookie 登入 API；OpenAPI 路徑及無效登入的統一 `401` 回應已驗證。
+- 已完成受 Identity 保護的活動建立、本人單筆查詢與名稱／候選日期修改 API。
+- 已完成包含 `DisplayName` 的主揪註冊與同站 Cookie 登入／登出 API，並以真實 HTTP 流程驗證。
 - 已以真實 Supabase 資料庫驗證註冊、Cookie 登入與新增活動 aggregate，成功一次寫入 Activity、2 筆候選日期及 2 筆候選地點。
 - 六筆活動類型的 `SeedActivityTypes` Migration 已套用至 Supabase。
 - 已確認台灣縣市／行政區官方代碼來源與匯入策略，詳見 `LOCATION_REFERENCE_DATA.md`。
@@ -34,12 +34,28 @@
 ### 後端測試
 
 在專案根目錄執行 `dotnet test asp-gather-match/asp-gather-match/asp-gather-match.slnx`。
-`GatherMatch.Tests` 使用 xUnit 與 Moq；單元測試不連線資料庫，不需要 User Secrets。
+`GatherMatch.Tests` 使用 xUnit 與 Moq；62 個單元測試不連線資料庫，另有 3 個 SQLite 記憶體關聯式測試驗證查詢隔離、日期交換與交易回復，皆不需要 User Secrets 或外部資料庫。
 已涵蓋登入成功／失敗、可重複呼叫的 `POST /api/auth/logout`，以及活動建立驗證、主揪身分、UTC 與分享碼雜湊。
 登出回傳 `200` 與統一 `ApiResponse`，透過 Identity 清除目前瀏覽器的 Cookie。
 
 `GET /api/activities/{id}` 需要登入且只回傳主揪自己的活動，包含候選日期／地點，依 `SortOrder`、ID 排序。
 成功回傳 `200`；未登入回傳 `401`；不存在與非本人活動一律回傳 `404`。查詢不回傳分享碼或雜湊。
+
+`PATCH /api/activities/{id}` 只接受 `title` 與 `dateOptions`，至少提供一項；需要主揪本人登入，且活動為尚未截止的 `open` 狀態。
+日期修改使用 GET 回傳的既有候選 ID；只修改送出的項目，不新增／刪除選項、不改排序。每個日期項目需提供 `id`、`optionDate`；省略或傳入 null 的 `startTime`／`endTime` 表示清除該時間。
+
+```json
+{
+  "title": "週末聚會",
+  "dateOptions": [
+    { "id": 11, "optionDate": "2026-10-03", "startTime": "18:00:00", "endTime": "20:00:00" }
+  ]
+}
+```
+
+範例 ID 須替換成該活動實際的候選 ID。只改名稱可只送 `title`；只改日期可只送 `dateOptions`。
+成功回傳 `200` 與更新後完整活動；無效輸入／夾帶不可修改欄位回傳 `400`，未登入 `401`，非本人／不存在 `404`，已截止或非 `open` 回傳 `409 activity_not_editable`。
+截止時間建立後固定；地點、類型、預算、地區也不能修改。到期只禁止修改，本次不包含自動結算。
 
 完整重跑指令、真實 API 驗證結果及保留的測試資料請見 [BACKEND_VERIFICATION.md](./BACKEND_VERIFICATION.md)。
 
@@ -273,7 +289,7 @@ Group Match Score
 | API Docs | Swagger / OpenAPI | 支援測試、契約檢查與作品展示 |
 | Background Job | Hangfire 或 Quartz.NET | 在 Deadline 觸發結算；實作前依部署需求擇一 |
 | Places | Google Places API（V0.2） | 根據地區、預算與類型建立真實地點候選 |
-| Authentication | 後續評估 JWT / OAuth | V0.1 免註冊，會員系統不阻塞核心驗證 |
+| Authentication | ASP.NET Core Identity + Cookie | 主揪登入與活動授權；朋友免註冊投票仍是後續範圍 |
 | Observability | `ILogger`；部署前評估 Elastic Stack | Container 輸出 ECS JSON 至 stdout／stderr，再集中收集與查詢 |
 | Deployment | Supabase（Database）；前後端待評估 | 優先考量可重現、易維護與成本可控 |
 
@@ -292,7 +308,7 @@ Group Match Score
 - [x] 建立 ASP.NET Core Identity 與 EF Core Migration 基礎
 - [x] 將 Identity、活動規劃 Schema 與 RLS 套用至 Supabase PostgreSQL
 - [x] 套用並驗證 `SeedActivityTypes` 活動類型參照資料
-- [ ] 實作活動、投票與結算流程（主揪註冊／登入與新增活動 API 第一版已完成）
+- [ ] 實作活動、投票與結算流程（主揪註冊／登入／登出與活動建立／查詢／修改已完成；投票與結算待實作）
 - [x] 建立 Nuxt 3 + TypeScript + Tailwind CSS 前端骨架
 - [ ] 導入背景排程及整合測試
 - [ ] 建立前後端 Docker 化與可重現的 Container 開發環境

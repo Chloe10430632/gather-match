@@ -34,6 +34,34 @@ public class ActivitiesController(IActivityService activityService) : Controller
         return Ok(ApiResponse<ActivityResponse>.Ok(activity, HttpContext.TraceIdentifier));
     }
 
+    [HttpPatch("{id:long}")]
+    [ProducesResponseType<ApiResponse<ActivityResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<ApiResponse<ActivityResponse>>> Update(long id, UpdateActivityRequest request)
+    {
+        if (!long.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var hostUserId))
+        {
+            return Unauthorized(ApiResponse<object>.Fail(
+                new ApiError("unauthorized", "需要登入才能執行此操作。"), HttpContext.TraceIdentifier));
+        }
+
+        var result = await activityService.UpdateAsync(hostUserId, id, request);
+        if (result.Activity is not null)
+            return Ok(ApiResponse<ActivityResponse>.Ok(result.Activity, HttpContext.TraceIdentifier));
+
+        var (status, message) = result.ErrorCode switch
+        {
+            "not_found" => (StatusCodes.Status404NotFound, "找不到指定的資源。"),
+            "activity_not_editable" => (StatusCodes.Status409Conflict, "只有尚未截止的開放活動可以修改。"),
+            _ => (StatusCodes.Status400BadRequest, "輸入資料驗證失敗。")
+        };
+        return StatusCode(status, ApiResponse<object>.Fail(
+            new ApiError(result.ErrorCode!, message, result.Errors), HttpContext.TraceIdentifier));
+    }
+
     [HttpPost]
     [ProducesResponseType<ApiResponse<CreateActivityResponse>>(StatusCodes.Status201Created)]
     [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]

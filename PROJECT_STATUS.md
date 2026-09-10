@@ -83,6 +83,9 @@
 - 已加入 `GatherMatch.Tests`（xUnit／Moq），涵蓋登入、登出與既有活動建立規則；單元測試不存取外部資料庫。
 - 已加入 `GET /api/activities/{id}`：Repository 同時篩選活動 ID 與登入主揪 ID，包含排序後的候選日期／地點；其他主揪或不存在均回傳 `404 not_found`，DTO 不包含分享碼或雜湊。
 - 2026-09-10：26 個單元測試通過；本機 API 連接開發 Supabase 的註冊、登入、建立、單筆查詢、登出通過 65 項檢查，包含跨主揪隔離與登出後 `401`。詳細紀錄與測試資料見 `BACKEND_VERIFICATION.md`。
+- 2026-09-10 完成本次最終目標：加入 `PATCH /api/activities/{id}`，只允許主揪修改尚未截止的 `open` 活動名稱與既有候選日期／時間；保留選項 ID、數量與排序，其他欄位固定。截止時間不可延長。
+- 修改 API 對不可修改欄位及無效日期回傳 `400`；非本人／不存在回傳 `404`；已截止或非 `open` 回傳 `409`。日期交換以交易處理唯一索引，不刪除選項。
+- 最新驗證：62 個單元測試＋3 個 SQLite 記憶體關聯式測試通過；完整真實 Cookie／Supabase HTTP 流程通過 197 項檢查，包含日期交換、固定欄位、到期拒絕修改與登出後三個活動 endpoints 的 `401`。
 
 - 建立 ASP.NET Core 10 Web API 專案，Target Framework 為 `net10.0`。
 - 後端目前可成功建置及啟動，最近一次結果為 0 個警告、0 個錯誤。
@@ -166,7 +169,7 @@
 - Step 2 的推薦地點只是 Demo Data，尚未依活動類型、預算與地區真正篩選。
 - Google Maps 連結目前只會當成一般文字加入，尚未解析地點資訊。
 - 尚未製作 Step 4「截止結算／最佳方案」。
-- 已建立新增活動與主揪單筆查詢 API；尚未建立修改 API、投票 Entity 或 Deadline 背景排程。
+- 已完成活動建立、主揪單筆查詢與名稱／既有候選日期修改；不含新增／刪除日期選項、投票 Entity 或 Deadline 背景排程。
 - `ActivityType` Seed 與 City、District 參照資料皆已套用；真實註冊、Cookie 登入與新增活動 aggregate 已使用一次性測試資料驗證成功。
 - 目前 Auth API 使用同站 Identity Cookie，適合 Swagger 與同站開發驗證；Nuxt 分站部署前仍需確認 CORS、Cookie `SameSite`／`Secure` 與 CSRF 防護策略。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
@@ -180,11 +183,10 @@
 
 ## 建議下一步
 
-主揪登入／登出、活動建立與本人單筆查詢已通過單元測試及真實 Cookie HTTP 驗證。
+主揪登入／登出、活動建立、本人單筆查詢與名稱／候選日期修改已全部完成，並通過自動化測試及真實 Cookie HTTP 驗證。完整驗收與重跑方式見 `BACKEND_VERIFICATION.md`。
 
-本次目標尚缺活動修改 API。資料模型草案未決定建立後可修改哪些欄位，目前等待使用者確認範圍：先修改基本資料並保留候選項目，或也允許修改候選日期／地點。確認後繼續實作、測試、驗證與推送。
-
-投票、結算與排程均不屬於本次工作範圍。
+使用者已確認：建立後截止時間固定，不讓主揪反覆替未投票者延長；只可修改尚未截止的 `open` 活動名稱與日期。投票、結算與排程均不屬於本次工作範圍。
+後續加入投票模型前，必須先處理「日期變更不得沿用原投票」的規則，目前尚無投票資料可受影響。
 
 ### 部署前可觀測性待辦
 
@@ -227,5 +229,5 @@ npm run preview
 
 前端 Step 1～3 與主揪回覆管理 Demo 已完成。後端已建立 ASP.NET Core Identity，以及 ActivityType、City、District、Activity、DateOption、PlaceOption；InitialIdentity、AddActivityPlanning、EnableRowLevelSecurity 三個 Migration 都已套用至 Supabase PostgreSQL。
 
-主揪註冊／登入／登出、活動建立與本人單筆查詢已完成。請檢查實際程式碼、Git 狀態與 BACKEND_VERIFICATION.md，依使用者確認的範圍接續活動修改 API 與測試。暫時不要建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
+主揪註冊／登入／登出、活動建立、本人單筆查詢與名稱／既有候選日期修改已完成，65 個自動化測試與 197 項真實 API 檢查通過。請檢查實際程式碼、Git 狀態與 BACKEND_VERIFICATION.md，再依使用者的新任務決定範圍。暫時不要自行建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
 ```

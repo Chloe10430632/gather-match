@@ -61,4 +61,41 @@ public class ActivitiesControllerTests
         Assert.Equal("/api/activities/42", created.Location);
         service.Verify(x => x.CreateAsync(7, request), Times.Once);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("invalid")]
+    public async Task Update_InvalidIdentity_Returns401WithoutCallingService(string? userId)
+    {
+        var result = await Controller(userId).Update(42, new() { Title = "Changed" });
+        Assert.IsType<UnauthorizedObjectResult>(result.Result);
+        service.Verify(x => x.UpdateAsync(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<UpdateActivityRequest>()), Times.Never);
+    }
+
+    [Theory]
+    [InlineData("not_found", 404)]
+    [InlineData("activity_not_editable", 409)]
+    [InlineData("validation_failed", 400)]
+    public async Task Update_Failures_ReturnExpectedStatusAndEnvelope(string code, int status)
+    {
+        service.Setup(x => x.UpdateAsync(7, 42, It.IsAny<UpdateActivityRequest>()))
+            .ReturnsAsync(new ActivityUpdateResult(null, code, []));
+        var result = await Controller("7").Update(42, new() { Title = "Changed" });
+        var response = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(status, response.StatusCode);
+        Assert.Equal(code, Assert.IsType<ApiResponse<object>>(response.Value).Error!.Code);
+    }
+
+    [Fact]
+    public async Task Update_UsesClaimAndReturns200()
+    {
+        var activity = new ActivityResponse(42, "Changed", 1, null, null, "TWD", 1, null,
+            DateTimeOffset.UtcNow.AddDays(1), "open", DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, [], []);
+        service.Setup(x => x.UpdateAsync(7, 42, It.IsAny<UpdateActivityRequest>()))
+            .ReturnsAsync(ActivityUpdateResult.Success(activity));
+        var result = await Controller("7").Update(42, new() { Title = "Changed" });
+        var body = Assert.IsType<ApiResponse<ActivityResponse>>(Assert.IsType<OkObjectResult>(result.Result).Value);
+        Assert.Equal(activity, body.Data);
+        service.Verify(x => x.UpdateAsync(7, 42, It.IsAny<UpdateActivityRequest>()), Times.Once);
+    }
 }

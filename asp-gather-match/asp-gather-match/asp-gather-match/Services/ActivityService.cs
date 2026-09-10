@@ -15,6 +15,62 @@ public class ActivityService(IActivityRepository activityRepository) : IActivity
         return activity is null ? null : ToResponse(activity);
     }
 
+    public async Task<ActivityUpdateResult> UpdateAsync(
+        long hostUserId, long activityId, UpdateActivityRequest request)
+    {
+        var activity = await activityRepository.GetOwnedAsync(activityId, hostUserId);
+        if (activity is null)
+            return ActivityUpdateResult.NotFound();
+
+        var now = DateTimeOffset.UtcNow;
+        if (activity.Status != "open" || activity.DeadlineAt <= now)
+            return ActivityUpdateResult.NotEditable();
+
+        if (request.Title is null && request.DateOptions is null)
+            return ActivityUpdateResult.Invalid("request", "至少需要提供活動名稱或候選日期。");
+
+        if (request.Title is not null && (string.IsNullOrWhiteSpace(request.Title) || request.Title.Length > 100))
+            return ActivityUpdateResult.Invalid("title", "活動名稱必須為 1 到 100 字，且不可只包含空白。");
+
+        if (request.DateOptions is not null)
+        {
+            if (request.DateOptions.Count == 0 || request.DateOptions.Any(option => option is null))
+                return ActivityUpdateResult.Invalid("dateOptions", "至少需要一個有效的候選日期修改項目。");
+
+            if (request.DateOptions.Select(option => option.Id).Distinct().Count() != request.DateOptions.Count)
+                return ActivityUpdateResult.Invalid("dateOptions", "候選日期 ID 不可重複。");
+
+            var existingIds = activity.DateOptions.Select(option => option.Id).ToHashSet();
+            if (request.DateOptions.Any(option => !existingIds.Contains(option.Id)))
+                return ActivityUpdateResult.Invalid("dateOptions", "只能修改這場活動既有的候選日期。");
+
+            if (request.DateOptions.Any(option => option.StartTime.HasValue && option.EndTime.HasValue && option.EndTime <= option.StartTime))
+                return ActivityUpdateResult.Invalid("dateOptions", "候選日期的結束時間必須晚於開始時間。");
+
+            var updates = request.DateOptions.ToDictionary(option => option.Id);
+            // 同時檢查未修改的項目；只驗證 request 會漏掉與既有日期重複的情況。
+            var resultingDates = activity.DateOptions.Select(option => updates.TryGetValue(option.Id, out var update)
+                ? (update.OptionDate, update.StartTime)
+                : (option.OptionDate, option.StartTime));
+            if (resultingDates.Distinct().Count() != activity.DateOptions.Count)
+                return ActivityUpdateResult.Invalid("dateOptions", "候選日期與開始時間不可重複。");
+
+            // 所有驗證通過後才修改 tracked entity，失敗時不留下部分變更。
+            foreach (var option in activity.DateOptions)
+            {
+                if (!updates.TryGetValue(option.Id, out var update)) continue;
+                option.OptionDate = update.OptionDate;
+                option.StartTime = update.StartTime;
+                option.EndTime = update.EndTime;
+            }
+        }
+
+        if (request.Title is not null) activity.Title = request.Title.Trim();
+        activity.UpdatedAt = now;
+        await activityRepository.SaveChangesAsync();
+        return ActivityUpdateResult.Success(ToResponse(activity));
+    }
+
     private static ActivityResponse ToResponse(ActivityEntity activity) => new(
         activity.Id, activity.Title, activity.ActivityTypeId,
         activity.BudgetMin, activity.BudgetMax, activity.CurrencyCode,
