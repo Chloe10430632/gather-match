@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, nextTick, ref } from "vue";
 import type {
   ActivityDraft,
   DatePreference,
@@ -9,6 +10,7 @@ import type {
 } from "~/types/activity";
 
 const currentStep = ref<1 | 2 | 3>(1);
+const demoMode = ref(false);
 const activityDraft = ref<ActivityDraft>({
   activityName: "",
   selectedDates: [],
@@ -185,8 +187,14 @@ function resetDemoParticipantSession() {
         <span>揪哪天?</span>
       </a>
     </header>
+    <nav class="relative z-10 mx-auto flex w-[min(1180px,calc(100%-2.5rem))] gap-4" aria-label="使用模式">
+      <button type="button" :aria-pressed="!demoMode" class="rounded-xl border border-teal px-4 py-2 font-bold text-teal" @click="demoMode = false">主揪活動管理</button>
+      <button type="button" :aria-pressed="demoMode" class="rounded-xl border px-4 py-2" @click="demoMode = true">體驗投票 Demo（不會儲存到伺服器）</button>
+    </nav>
 
-    <main id="top" class="relative z-10 mx-auto grid min-h-[650px] w-[min(1180px,calc(100%-2.5rem))] items-center gap-12 py-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:py-16">
+    <main v-if="!demoMode" class="relative z-10 mx-auto max-w-3xl px-5 py-10"><HostWorkspace /></main>
+
+    <main v-else id="top" class="relative z-10 mx-auto grid min-h-[650px] w-[min(1180px,calc(100%-2.5rem))] items-center gap-12 py-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:py-16">
       <section class="text-center lg:text-left">
         <p class="mb-4 text-xs font-black tracking-[0.2em] text-teal">{{ heroContent.eyebrow }}</p>
         <h1 class="text-[clamp(2.8rem,5.2vw,4.7rem)] font-black leading-[1.1] tracking-[-0.065em]">

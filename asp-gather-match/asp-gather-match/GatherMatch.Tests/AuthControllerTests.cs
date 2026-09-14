@@ -36,6 +36,27 @@ public class AuthControllerTests
     }
 
     [Fact]
+    public async Task Me_ReturnsCurrentUserWithoutCredentials()
+    {
+        users.Setup(x => x.GetUserAsync(controller.User)).ReturnsAsync(
+            new ApplicationUser { Id = 7, Email = "host@example.invalid", DisplayName = "Host", IsActive = true });
+        var result = await controller.Me();
+        var response = Assert.IsType<ApiResponse<AuthUserResponse>>(Assert.IsType<OkObjectResult>(result.Result).Value);
+        Assert.Equal(7, response.Data!.Id);
+        Assert.Equal("Host", response.Data.DisplayName);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Me_RejectsMissingOrInactiveUser(bool exists)
+    {
+        users.Setup(x => x.GetUserAsync(controller.User)).ReturnsAsync(
+            exists ? new ApplicationUser { IsActive = false } : null);
+        Assert.IsType<UnauthorizedResult>((await controller.Me()).Result);
+    }
+
+    [Fact]
     public async Task Login_ValidUser_UsesNonPersistentCookieAndLockout()
     {
         var user = new ApplicationUser { Id = 7, Email = "host@example.invalid", DisplayName = "Test host", IsActive = true };

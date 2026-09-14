@@ -11,11 +11,13 @@
 
 
 > [!IMPORTANT]
-> 本專案目前正在開發 MVP。Nuxt 前端流程為 Demo 狀態；ASP.NET Core Identity、第一批活動資料模型與 Supabase PostgreSQL Schema 已建立，但前後端尚未串接。
+> 本專案目前正在開發 MVP。Nuxt 已串接 ASP.NET Core 的主揪註冊／登入／登出、活動建立／查詢／修改。朋友投票仍為獨立 Demo，公開分享頁與結算尚未實作。
 
 ## 🚧 Current Progress
 
-- Nuxt 3 前端已完成建立活動、確認地點、朋友投票與主揪回覆管理的 Demo 流程。
+- 首頁預設進入真實主揪管理；原有投票與回覆管理 Demo 由獨立入口開啟，不會送出到後端。
+- 新增 `GET /api/auth/me` 與 `GET /api/reference-data`，用於恢復登入狀態與取得真實類型／地區 ID。
+- Nuxt server 代理同站 `/api` 請求與 Identity Cookie；寫入要求自訂 header 並拒絕跨站來源，API 回應禁止快取。
 - ASP.NET Core 10 Web API 已完成 Identity、EF Core、Npgsql 與 User Secrets 基礎設定。
 - Supabase PostgreSQL 已套用 `InitialIdentity`、`AddActivityPlanning`、`EnableRowLevelSecurity` 三個 Migration。
 - 已建立 `ActivityType`、`City`、`District`、`Activity`、`DateOption`、`PlaceOption` 資料模型及關聯。
@@ -31,10 +33,28 @@
 
 詳細交接請見 [`PROJECT_STATUS.md`](./PROJECT_STATUS.md)。
 
+### 本機前後端啟動
+
+需要 .NET SDK 10、Node.js 與既有 User Secrets。開兩個終端機：
+
+```powershell
+# 終端機 1：專案根目錄
+dotnet run --project asp-gather-match/asp-gather-match/asp-gather-match --launch-profile http
+
+# 終端機 2：前端
+cd nuxt-gather-match
+npm ci
+npm run dev
+```
+
+開啟 `http://localhost:3000`，註冊／登入後建立活動。可收藏 `?activity=活動編號` 的網址，或輸入活動編號重新查詢。截止後禁止修改；目前沒有活動列表 API。
+
+Nuxt 伺服器預設代理至 `http://localhost:5138`，可用伺服器環境變數 `NUXT_API_BASE` 覆寫。部署需要 Nitro Node server，不能只使用靜態 `generate` 產物；對外使用 HTTPS，後端應保持在受信任的內部網路。Cookie 與來源檢查的部署注意事項見 [FRONTEND_INTEGRATION.md](./FRONTEND_INTEGRATION.md)。
+
 ### 後端測試
 
 在專案根目錄執行 `dotnet test asp-gather-match/asp-gather-match/asp-gather-match.slnx`。
-`GatherMatch.Tests` 使用 xUnit 與 Moq；62 個單元測試不連線資料庫，另有 3 個 SQLite 記憶體關聯式測試驗證查詢隔離、日期交換與交易回復，皆不需要 User Secrets 或外部資料庫。
+`GatherMatch.Tests` 目前共 69 個測試，使用 xUnit、Moq 與 SQLite 記憶體資料庫；皆不需要 User Secrets 或外部資料庫。涵蓋身分查詢、有效參照資料、查詢隔離、日期交換與交易回復。
 已涵蓋登入成功／失敗、可重複呼叫的 `POST /api/auth/logout`，以及活動建立驗證、主揪身分、UTC 與分享碼雜湊。
 登出回傳 `200` 與統一 `ApiResponse`，透過 Identity 清除目前瀏覽器的 Cookie。
 

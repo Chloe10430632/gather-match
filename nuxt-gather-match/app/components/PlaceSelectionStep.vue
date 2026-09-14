@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import type { ActivityDraft, PlaceOption } from "~/types/activity";
 
 interface DisplayPlace extends PlaceOption {

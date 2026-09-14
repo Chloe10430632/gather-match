@@ -4,10 +4,10 @@
 
 ## Current Status
 
-- 已完成 Step 1～3 與主揪回覆管理的純前端 Demo。
-- 活動與投票資料目前仍保存在前端狀態及 `localStorage`，尚未呼叫後端 API。
-- ASP.NET Core 後端已完成 Identity、活動規劃資料模型、Supabase PostgreSQL Schema 與「新增活動」API 第一版。
-- 下一個整合階段會先完成主揪註冊／登入，再由這個前端送出活動、候選日期與候選地點。
+- 首頁主揪管理已串接 ASP.NET Core：註冊、登入、登出、恢復身分、活動建立、查詢、名稱與候選日期／時間修改。
+- 類型與縣市／行政區選項使用後端參照資料 ID，截止時間由本地時間轉為 UTC。
+- 同站 `/api` 經 Nitro server 代理至 `NUXT_API_BASE`（預設 `http://localhost:5138`），登入 Cookie 不存入 localStorage。
+- 原有 Step 1～3 投票 Demo 保留在獨立入口，僅 Demo 使用 localStorage；公開分享／投票 API 尚未實作。
 
 完整專案進度與下一步請見根目錄的 [`PROJECT_STATUS.md`](../PROJECT_STATUS.md)。
 
@@ -24,6 +24,17 @@ npm run dev
 ```
 
 開啟 `http://localhost:3000`。
+
+先從專案根目錄啟動後端：`dotnet run --project asp-gather-match/asp-gather-match/asp-gather-match --launch-profile http`。
+完整驗證及限制見 [FRONTEND_INTEGRATION.md](../FRONTEND_INTEGRATION.md)。
+
+```bash
+npm run typecheck
+npm run build
+npm run test:proxy
+```
+
+`test:proxy` 啟動隔離上游與 production Nitro server，不連線雲端。手動 UI 測試可在 build 後執行 `node tests/ui-fixture.mjs`，開啟 `http://127.0.0.1:3001`；僅使用記憶體測試資料，結束按 Ctrl+C。
 
 ## Production
 

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>揪哪天？</title>
+  <path fill="#F16F5C" d="M16 0h32a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16H4a4 4 0 0 1-4-4V16A16 16 0 0 1 16 0Z"/>
+  <text x="32" y="47" fill="#fff" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif" font-size="44" font-weight="900" text-anchor="middle">揪</text>
+</svg>

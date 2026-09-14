@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "typecheck": "nuxt typecheck",
+    "test:proxy": "node --test tests/api-proxy.test.mjs",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -13,5 +15,8 @@
     "@nuxtjs/tailwindcss": "^6.14.0",
     "nuxt": "^3.20.0",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "vue-tsc": "3.2.5"
   }
 }

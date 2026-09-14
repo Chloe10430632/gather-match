@@ -1,6 +1,6 @@
 # 揪哪天？（Gathering Match）— 專案進度交接
 
-最後更新：2026-09-10
+最後更新：2026-09-14
 
 ## 專案位置
 
@@ -12,7 +12,19 @@
 
 ## 目前做到哪裡
 
-前端 Step 1～3 與主揪回覆管理 Demo 已完成，目前開始建立 ASP.NET Core 後端基礎；尚未串接前後端或真實地點 API。
+Nuxt 主揪管理已串接 ASP.NET Core 的註冊、登入、登出、活動建立、查詢與名稱／候選日期修改。原有朋友投票與回覆管理仍是獨立 Demo；真實公開投票、結算與地點推薦尚未實作。
+
+### 2026-09-14 前後端串接
+
+- 首頁改以 `HostWorkspace.vue` 呈現真實主揪流程；使用現有 `DateMultiPicker`，手動輸入 1～5 個候選地點及固定截止時間。
+- 新增 `GET /api/auth/me` 恢復 Cookie 登入身分；新增 `GET /api/reference-data` 提供有效且排序後的活動類型、縣市與行政區 ID。
+- `server/api/[...path].ts` 將允許的 `/api` 路徑代理至伺服器端 `NUXT_API_BASE`，轉送 Cookie、錯誤與狀態碼，拒絕跨站寫入並禁止 API 快取。
+- `?activity=ID` 可重新整理或收藏；後端仍負責主揪權限，沒有新增活動列表 API。
+- 日期修改保留既有 ID，只送出 title／dateOptions；到期禁用修改，API 的 409 仍是最終判斷。
+- 已新增 `vue-tsc` 與 typecheck／proxy 測試指令；既有 Demo 的三個檔案補上明確 Vue imports，修復本次檢查發現的自動匯入型別問題。
+- 驗證：69 個後端測試、Nuxt 型別檢查、production build、隔離 HTTP 代理測試；瀏覽器以記憶體 fixture 完成登入、建立、修改、重整恢復與登出。
+- 真實後端唯讀驗證：透過 Nuxt 取得 6 個類型、22 個縣市、368 個行政區；未登入 `/auth/me` 回傳 401。本次沒有透過 Nuxt 寫入 Supabase；先前 197 項真實 API 驗證仍屬 2026-09-10 紀錄。
+- 新增檔案與重跑方式見 `FRONTEND_INTEGRATION.md`；另已加入與品牌一致的珊瑚橘「揪」字 SVG favicon。
 
 ### 已完成
 
@@ -171,10 +183,10 @@
 - 尚未製作 Step 4「截止結算／最佳方案」。
 - 已完成活動建立、主揪單筆查詢與名稱／既有候選日期修改；不含新增／刪除日期選項、投票 Entity 或 Deadline 背景排程。
 - `ActivityType` Seed 與 City、District 參照資料皆已套用；真實註冊、Cookie 登入與新增活動 aggregate 已使用一次性測試資料驗證成功。
-- 目前 Auth API 使用同站 Identity Cookie，適合 Swagger 與同站開發驗證；Nuxt 分站部署前仍需確認 CORS、Cookie `SameSite`／`Secure` 與 CSRF 防護策略。
+- Nuxt 現在透過同站 server 代理使用 Identity Cookie，不開放跨站 CORS。部署需使用 HTTPS 與受信任的反向代理；後端限內部存取，詳見 `FRONTEND_INTEGRATION.md`。
 - 尚未建立真正的 Nuxt 公開分享路由；目前朋友入口仍是同一頁面的元件切換。
 - 示意分享連結尚未建立或載入真實活動資料。
-- Nuxt Demo 的活動、朋友與投票內容尚未串接後端；後端活動建立已實際寫入資料庫。
+- 主揪管理已串接活動 API；獨立 Nuxt Demo 的活動、朋友與投票內容仍只用於示意。
 - `localStorage` 目前同時保存示意 Token 與投票內容，只供前端流程驗證；正式版瀏覽器只應保存參加者識別碼，投票內容由後端保存與驗證。
 - 正式版需要兩種識別：網址中的活動 `shareToken`，以及朋友瀏覽器保存的 `participantToken`。資料庫只保存 `participantToken` 的安全雜湊值。
 - 清除瀏覽器資料、使用無痕模式或更換裝置時，免登入參加者可能無法自動找回原身分；這是 V0.1 可接受但需清楚說明的限制。
@@ -183,7 +195,7 @@
 
 ## 建議下一步
 
-主揪登入／登出、活動建立、本人單筆查詢與名稱／候選日期修改已全部完成，並通過自動化測試及真實 Cookie HTTP 驗證。完整驗收與重跑方式見 `BACKEND_VERIFICATION.md`。
+主揪 API 與 Nuxt 串接均已完成。後續可在使用者授權開發資料庫寫入後，從 Nuxt 完整重跑真實註冊、建立與修改；本次隔離測試結果見 `FRONTEND_INTEGRATION.md`，先前後端驗證見 `BACKEND_VERIFICATION.md`。
 
 使用者已確認：建立後截止時間固定，不讓主揪反覆替未投票者延長；只可修改尚未截止的 `open` 活動名稱與日期。投票、結算與排程均不屬於本次工作範圍。
 後續加入投票模型前，必須先處理「日期變更不得沿用原投票」的規則，目前尚無投票資料可受影響。
@@ -229,5 +241,5 @@ npm run preview
 
 前端 Step 1～3 與主揪回覆管理 Demo 已完成。後端已建立 ASP.NET Core Identity，以及 ActivityType、City、District、Activity、DateOption、PlaceOption；InitialIdentity、AddActivityPlanning、EnableRowLevelSecurity 三個 Migration 都已套用至 Supabase PostgreSQL。
 
-主揪註冊／登入／登出、活動建立、本人單筆查詢與名稱／既有候選日期修改已完成，65 個自動化測試與 197 項真實 API 檢查通過。請檢查實際程式碼、Git 狀態與 BACKEND_VERIFICATION.md，再依使用者的新任務決定範圍。暫時不要自行建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
+主揪註冊／登入／登出、活動建立、本人單筆查詢與名稱／既有候選日期修改已完成 Nuxt 串接，目前 69 個後端測試通過；前端 typecheck、build、proxy 與隔離瀏覽器流程已驗證。197 項真實 API 檢查是先前後端紀錄。請先讀 FRONTEND_INTEGRATION.md、實際程式碼與 Git 狀態，再依新任務決定範圍。暫時不要自行建立 Participant／Vote／FormationResult、Deadline 背景排程或 Google Places API。
 ```

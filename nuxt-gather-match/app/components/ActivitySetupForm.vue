@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch } from "vue";
 import type { ActivityDraft } from "~/types/activity";
 
 const draft = defineModel<ActivityDraft>({ required: true });

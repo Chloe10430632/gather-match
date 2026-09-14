@@ -12,6 +12,15 @@ public class AuthController(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager) : ControllerBase
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<ApiResponse<AuthUserResponse>>> Me()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null || !user.IsActive) return Unauthorized();
+        return Ok(ApiResponse<AuthUserResponse>.Ok(ToResponse(user), HttpContext.TraceIdentifier));
+    }
+
     [HttpPost("register")]
     [ProducesResponseType<ApiResponse<AuthUserResponse>>(StatusCodes.Status201Created)]
     [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]
